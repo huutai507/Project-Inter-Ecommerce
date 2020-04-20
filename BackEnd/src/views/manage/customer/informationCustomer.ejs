@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>OneTech</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="OneTech shop project">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/styles/bootstrap4/bootstrap.min.css">
+    <link href="/plugins/fontawesome-free-5.0.1/css/fontawesome-all.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="/plugins/OwlCarousel2-2.2.1/owl.carousel.css">
+    <link rel="stylesheet" type="text/css" href="/plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
+    <link rel="stylesheet" type="text/css" href="/plugins/OwlCarousel2-2.2.1/animate.css">
+    <link rel="stylesheet" type="text/css" href="/plugins/slick-1.8.0/slick.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/styles/main_styles.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/styles/responsive.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/css/login.css">
+    <script src="https://cdn.ckeditor.com/4.4.5.1/standard/ckeditor.js"></script>
+
+</head>
+
+<body>
+
+
+    <script src="/javascripts/js/jquery-3.3.1.min.js"></script>
+    <script src="/stylesheets/styles/bootstrap4/popper.js"></script>
+    <script src="/stylesheets/styles/bootstrap4/bootstrap.min.js"></script>
+    <script src="/plugins/greensock/TweenMax.min.js"></script>
+    <script src="/plugins/greensock/TimelineMax.min.js"></script>
+    <script src="/plugins/scrollmagic/ScrollMagic.min.js"></script>
+    <script src="/plugins/greensock/animation.gsap.min.js"></script>
+    <script src="/plugins/greensock/ScrollToPlugin.min.js"></script>
+    <script src="/plugins/OwlCarousel2-2.2.1/owl.carousel.js"></script>
+    <script src="/plugins/slick-1.8.0/slick.js"></script>
+    <script src="/plugins/easing/easing.js"></script>
+    <script src="/javascripts/js/custom.js"></script>
+</body>
+
+</html>
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Admin</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+    <!-- Custom styles for this template-->
+    <link href="/admin/css/sb-admin-2.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <%- include("../sidebar/sidebar"); %>
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <%- include("../topbar/topbar"); %>
+
+            <!-- Main Content -->
+            <div id="content">
+                <div class="super_container">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                                <div class="card card-signin my-5">
+                                    <div class="card-body">
+                                        <% if(errors != "") { %>
+                                        <% errors.forEach((item) => { %>
+                                        <div class="alert alert-danger">
+                                            <%-item%>
+                                        </div>
+                                        <% });%>
+                                        <% } %>
+                                        <h5 class="card-title text-center">Update Customer</h5>
+                                        <form class="form-signin" action="/customer/update/<%= customer[0].id %>"
+                                            method="POST">
+                                            <div class="form-label-group">
+                                                <input type="text" id="inputCustomerID" class="form-control" name="id"
+                                                    value="<%= customer[0].id %>" disabled>
+                                                <label for="inputCustomerID">ID</label>
+                                            </div>
+                                            <div class="form-label-group">
+                                                <input type="text" id="inputCategoryName" autofocus class="form-control"
+                                                    name="customerName" value="<%= customer[0].customerName %>">
+                                                <label for="inputCustomerName">Customer Name</label>
+                                            </div>
+                                            <%
+                                                let c = customer[0].birthday;
+                                                let day = new Date(c)
+                                                let dd = day.getDate();
+                                                let mm = day.getMonth() + 1;
+                                                let yyyy = day.getFullYear();
+                                                if (dd < 10) {
+                                                    dd = '0' + dd;
+                                                }
+                                                if (mm < 10) {
+                                                    mm = '0' + mm;
+                                                }
+                                                day = yyyy + '-' + mm + '-' + dd;
+                                            %>
+                                            <div class="form-label-group">
+                                                <input type="date" id="inputCustomerBirthday" class="form-control"
+                                                    name="birthday" value="<%= day %>">
+                                                <label for="inputCustomerBirthday">Birthday</label>
+                                            </div>
+                                            <div class="form-label-group" class="form-control">
+                                                <%if(customer[0].gender === 'Male'){%>
+                                                <div style="margin-left: 3rem">
+                                                    <span>
+                                                        <i class="fas fa-mars"></i>
+                                                        <input type="radio" name="gender" id="male" value="Male"
+                                                            checked>
+                                                    </span>
+                                                    Male
+                                                    <span style="margin-left: 10px;">
+                                                        <i class="fas fa-venus"></i>
+                                                        <input type="radio" name="gender" id="female" value="Female">
+                                                        Female
+                                                    </span>
+                                                </div>
+                                                <%} else {%>
+                                                <div style="margin-left: 3rem">
+                                                    <span>
+                                                        <i class="fas fa-mars"></i>
+                                                        <input type="radio" name="gender" id="male" value="Male"> Male
+                                                    </span>
+                                                    <span style="margin-left: 10px;">
+                                                        <i class="fas fa-venus"></i>
+                                                        <input type="radio" name="gender" id="female" value="Female"
+                                                            checked> Female
+                                                    </span>
+                                                </div>
+                                                <%}%>
+                                            </div>
+                                            <div class="form-label-group">
+                                                <input type="text" id="inputCustomerAddress" class="form-control" name="address" value="<%= customer[0].address %>">
+                                                <label for="inputCustomerAddress">Address</label>
+                                            </div>
+                                            <div class="form-label-group">
+                                                <input type="text" id="inputCustomerPhone" class="form-control"
+                                                    name="phone" value="<%= customer[0].phone %>">
+                                                <label for="inputCustomerPhone">Phone</label>
+                                            </div>
+                                            <div class="form-label-group">
+                                                <input type="text" id="inputCustomerEmail" class="form-control"
+                                                    name="email" value="<%= customer[0].email %>">
+                                                <label for="inputCustomerEmail">Email</label>
+                                            </div>
+                                            <button class="btn btn-lg btn-primary btn-block text-uppercase"
+                                                type="submit">Update</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <%- include("../footer/footer"); %>
+            <!-- End of Footer -->
+        </div>
+        <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="login.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    </script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="/admin/vendor/jquery/jquery.min.js"></script>
+    <script src="/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="/admin/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="/admin/js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="/admin/vendor/chart.js/Chart.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="/admin/js/demo/chart-area-demo.js"></script>
+    <script src="/admin/js/demo/chart-pie-demo.js"></script>
+
+</body>
+
+</html>
