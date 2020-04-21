@@ -1,4 +1,5 @@
 import connectDB from '../config/connectDB';
+import { response } from 'express';
 let axios = require('axios');
 const stripePublicKey = process.env.STRIPE_PUBLIC_KEY
 
@@ -14,6 +15,7 @@ module.exports.getHome = (req, res) => {
                 jsonData
             })
         }).catch((error) => {
+            res.render('index');
         })
 }
 // cart
@@ -26,7 +28,10 @@ module.exports.getCart = (req, res) => {
                 categories,
                 brands
             })
+        }).catch(() => {
+            res.render('cart')
         })
+
 }
 
 module.exports.getContact = (req, res) => {
@@ -38,7 +43,7 @@ module.exports.getContact = (req, res) => {
                 brands
             })
         }).catch(() => {
-
+            res.render('contact')
         })
 
 }
@@ -64,7 +69,7 @@ module.exports.productDetail = (req, res) => {
                 brands
             })
         }).catch(() => {
-            console.log('Hihi')
+            res.render('productDetail')
         })
 
 }
@@ -72,10 +77,10 @@ module.exports.productDetail = (req, res) => {
 module.exports.filterCategory = (req, res) => {
     let categoryId = req.params.id;
     console.log(categoryId)
-    axios.get('http://localhost:4500/filter-category/id=' + categoryId)
+    axios.get('http://localhost:4500/filter-category/' + categoryId)
         .then((response) => {
             let { products, categories, brands, errors, jsonData } = response.data;
-            render('main/filter/filter', {
+            res.render('main/filter/filter', {
                 products,
                 categories,
                 brands,
@@ -84,103 +89,64 @@ module.exports.filterCategory = (req, res) => {
             })
         })
         .catch(() => {
-            console.log('Error rồi bồ ơi')
+            res.render('main/filter/filter')
         })
 
 }
 // filter Brand
 module.exports.filterBrand = (req, res) => {
     let brandId = req.params.id;
-    let sql = 'SELECT * FROM tbl_products where brandId = ? ORDER BY price DESC; SELECT * FROM tbl_categories; SELECT * FROM tbl_brands ';
-    connectDB.query(sql, [brandId], (err, result) => {
-        if (err) {
-            res.status(400).send({
-                status: 400,
-                message: 'Fail to query database'
-            });
-        }
-        let dataProductJSON = JSON.stringify(result[0]);
-        if (result[0].length) {
+    axios.get('http://localhost:4500/filter-brand/' + brandId)
+        .then((response) => {
+            let { products, categories, brands, errors, jsonData } = response.data;
             res.render('main/filter/filter', {
-                products: result[0],
-                categories: result[1],
-                brands: result[2],
-                jsonData: dataProductJSON,
-                errors: ''
-            });
-        } else
-            res.render('main/filter/filter', {
-                products: result[0],
-                categories: result[1],
-                brands: result[2],
-                jsonData: dataProductJSON,
-                errors: 'No products'
+                products,
+                categories,
+                brands,
+                errors,
+                jsonData
             })
-    })
+        })
+        .catch(() => {
+            res.render('main/filter/filter')
+        })
 }
 
 // search
 module.exports.search = (req, res) => {
     const search = req.query.key;
-    const nameTable = ['tbl_products'];
-    const name = [`tbl_products.productName LIKE '%${search}%' ORDER BY price DESC; SELECT * FROM tbl_categories; SELECT * FROM tbl_brands`];
-    connectDB.query(
-        `SELECT DISTINCT * FROM ${nameTable} WHERE ${name}`,
-        (err, result) => {
-            if (err)
-                res.status(400).send({
-                    status: 400,
-                    message: 'Fail to query database'
-                });
-            let dataProductJSON = JSON.stringify(result[0]);
-            if (result[0].length) {
-                res.render('main/filter/filter', {
-                    products: result[0],
-                    categories: result[1],
-                    brands: result[2],
-                    jsonData: dataProductJSON,
-                    errors: ''
-                });
-            } else {
-                res.render('error', {
-                    products: result[0],
-                    categories: result[1],
-                    brands: result[2],
-                    jsonData: dataProductJSON,
-                })
-            }
-        }
-    );
+    axios.get('http://localhost:4500/search/?key=' + search)
+        .then((response) => {
+            console.log(response.data)
+            let { products, categories, brands, errors, jsonData } = response.data
+            res.render('main/filter/filter', {
+                products,
+                categories,
+                brands,
+                errors,
+                jsonData
+            })
+        })
+        .catch(() => {
+            res.render('main/filter/filter')
+        })
 };
 // filter price
 module.exports.filterPrice = (req, res) => {
-    const filter = req.query.from;
-    const filter1 = req.query.to;
-    connectDB.query(
-        'SELECT * FROM `tbl_products` WHERE price BETWEEN ? and ? ORDER BY price DESC; SELECT * FROM tbl_categories; SELECT * FROM tbl_brands`', [filter, filter1],
-        (err, result) => {
-            if (err)
-                res.status(400).send({
-                    status: 400,
-                    message: 'Fail to query database'
-                });
-            let dataProductJSON = JSON.stringify(result[0]);
-            if (result[0].length) {
-                res.render('main/filter/filter', {
-                    products: result[0],
-                    categories: result[1],
-                    brands: result[2],
-                    jsonData: dataProductJSON,
-                    errors: ''
-                });
-            } else {
-                res.render('error', {
-                    products: result[0],
-                    categories: result[1],
-                    brands: result[2],
-                    jsonData: dataProductJSON,
-                })
-            }
-        }
-    );
+    const from = req.query.from;
+    const to = req.query.to;
+    axios.get('http://localhost:4500/filter-price/?from=' + from + '&to=' + to)
+        .then((response) => {
+            let { products, categories, brands, errors, jsonData } = response.data;
+            res.render('main/filter/filter', {
+                products,
+                categories,
+                brands,
+                errors,
+                jsonData
+            })
+        })
+        .catch(() => {
+            res.render('main/filter/filter')
+        })
 };

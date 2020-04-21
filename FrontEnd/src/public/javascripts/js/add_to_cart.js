@@ -32,7 +32,7 @@ async function sendData() {
     let stripeHandler = StripeCheckout.configure({
         key: stripePublicKey,
         locale: 'en',
-        token: function(token) {
+        token: function (token) {
             const options = {
                 method: 'POST',
                 headers: {
@@ -150,6 +150,7 @@ function displayCart() {
 
     let productContainer = document.querySelector(".cart_items");
     let productTotal = document.querySelector(".order_total_content");
+    let informationUser = document.querySelector(".information_user");
     if (cartsItems && productContainer) {
         productContainer.innerHTML = '';
         Object.values(cartsItems).map((item, index) => {
@@ -199,6 +200,53 @@ function displayCart() {
         productTotal.innerHTML = `
                 <div class="order_total_title">Order Total:</div>
                 <div class="order_total_amount">${cart}$</div>`;
+
+        informationUser.innerHTML = `
+                <div>
+                    <div style="display:flex; flex-direction:start; align-items:center;">    
+                        <div class="form-label-group mt-4" style="width:25%; margin:0 20px 0 0">
+                            <div>Your name</div>
+                            <input type="text" class="form-control customerName" required />
+                        </div>
+                        <div class="form-label-group mt-4" style="width:25%; margin:0 30px 0 0">
+                            <div>Date Of Birth</div>
+                            <input type="date" class="form-control date-of-birth" required />
+                        </div>
+                        <div class="form-label-group" style="margin-top:55px">
+                            <div class="d-flex">
+                                <span>
+                                    <i class="fas fa-mars"></i>
+                                    <label for="gender">
+                                        <input type="radio" class="form-control gender" name="gender" value="Male"
+                                            style="width: 25px; height: 25px;" checked /> Male
+                                    </label>
+                                </span>
+                                <span style="margin-left: 10px;">
+                                    <i class="fas fa-venus"></i>
+                                    <label for="gender">
+                                        <input type="radio" class="form-control gender" name="gender" value="Female"
+                                            style="color: black; width: 25px; height: 25px;" /> Female
+                                    </label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display:flex">
+                        <div class="form-label-group mt-4" style="width:25%; margin:0 20px 0 0 ">
+                            <div>Number phone</div>
+                            <input type="text" class="form-control number-phone" required />
+                        </div>
+                        <div class="form-label-group mt-4" style="width:25%">
+                            <div>Email</div>
+                            <input type="email" class="form-control email" required />
+                        </div>
+                    </div>
+                    <div class="form-label-group mt-4">
+                        <div>Address</div>
+                        <input type="text" class="form-control address" required />
+                    </div>
+                    </div>
+            `
         deleteButtons();
         manageQuantity();
     }
