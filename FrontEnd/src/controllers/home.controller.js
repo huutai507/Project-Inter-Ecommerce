@@ -1,7 +1,5 @@
-import connectDB from '../config/connectDB';
-import { response } from 'express';
+// import connectDB from '../config/connectDB';
 let axios = require('axios');
-const stripePublicKey = process.env.STRIPE_PUBLIC_KEY
 
 module.exports.getHome = (req, res) => {
     axios.get('http://localhost:4500/')
@@ -31,7 +29,6 @@ module.exports.getCart = (req, res) => {
         }).catch(() => {
             res.render('cart')
         })
-
 }
 
 module.exports.getContact = (req, res) => {
@@ -45,7 +42,6 @@ module.exports.getContact = (req, res) => {
         }).catch(() => {
             res.render('contact')
         })
-
 }
 
 module.exports.getShop = (req, res) => {
@@ -76,7 +72,6 @@ module.exports.productDetail = (req, res) => {
 // filter category
 module.exports.filterCategory = (req, res) => {
     let categoryId = req.params.id;
-    console.log(categoryId)
     axios.get('http://localhost:4500/filter-category/' + categoryId)
         .then((response) => {
             let { products, categories, brands, errors, jsonData } = response.data;
@@ -117,7 +112,6 @@ module.exports.search = (req, res) => {
     const search = req.query.key;
     axios.get('http://localhost:4500/search/?key=' + search)
         .then((response) => {
-            console.log(response.data)
             let { products, categories, brands, errors, jsonData } = response.data
             res.render('main/filter/filter', {
                 products,

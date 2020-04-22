@@ -1,3 +1,4 @@
+require('dotenv').config();
 import session from 'express-session';
 import MySQLStore from 'express-mysql-session';
 
