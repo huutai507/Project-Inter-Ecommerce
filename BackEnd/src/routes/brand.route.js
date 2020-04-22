@@ -12,7 +12,7 @@ router.get('/insert', controller.getCreateBrand);
 router.post('/insert', middleware.brandNameInsert, controller.insertBrand);
 // update brand
 router.get('/update/:id', controller.getUpdateBrand);
-router.post('/update/:id', validate.brand, middleware.brandNameUpdate, controller.updateBrand);
+router.post('/update/:id', middleware.brandNameUpdate, controller.updateBrand);
 // delete brand : id
 router.get('/delete/:id', controller.deleteBrand);
 // search Brands

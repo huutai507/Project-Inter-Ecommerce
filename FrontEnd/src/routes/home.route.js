@@ -6,7 +6,6 @@ const router = express.Router();
 router.get('/', controller.getHome);
 router.get('/cart', controller.getCart);
 router.get('/contact', controller.getContact);
-router.get('/shop', controller.getShop);
 router.get('/product-details', controller.productDetail);
 router.get('/filter-category/:id', controller.filterCategory);
 router.get('/filter-brand/:id', controller.filterBrand);
