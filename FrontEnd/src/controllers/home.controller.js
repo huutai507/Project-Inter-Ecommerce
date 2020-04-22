@@ -1,7 +1,7 @@
 import connectDB from '../config/connectDB';
-import { response } from 'express';
-let axios = require('axios');
-const stripePublicKey = process.env.STRIPE_PUBLIC_KEY
+import axios from 'axios'
+// let axios = require('axios');
+
 
 module.exports.getHome = (req, res) => {
     axios.get('http://localhost:4500/')
@@ -15,6 +15,7 @@ module.exports.getHome = (req, res) => {
                 jsonData
             })
         }).catch((error) => {
+
             res.render('index');
         })
 }

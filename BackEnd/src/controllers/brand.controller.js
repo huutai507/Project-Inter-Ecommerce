@@ -20,43 +20,36 @@ module.exports.getBrand = (req, res) => {
                 message: 'Fail to query database'
             });
         }
-        res.render('manage/brand/index', {
-            brands: result[0],
-            brandsAll: result[1],
-            page: pages,
-            errors: req.flash('errors'),
-            success: req.flash('success'),
-            permission: req.session.permission,
-            name: req.session.account,
-            loginsuccess: 0
-        });
+        let [brands, brandsAll] = [result[0], result[1]];
+        // FIX lai cho nay
+        res.json({ brands, brandsAll, page: pages, permission: 'MANAGE', loginsuccess: 0, name: 'nguyenhongthai' })
+        // res.render('manage/brand/index', {
+        //     brands: result[0],
+        //     brandsAll: result[1],
+        //     page: pages,
+        //     errors: req.flash('errors'),
+        //     success: req.flash('success'),
+        //     permission: req.session.permission,
+        //     name: req.session.account,
+        //     loginsuccess: 0
+        // });
     });
 }
 
 // get insert
 module.exports.getCreateBrand = (req, res) => {
-    res.render('manage/brand/createBrand', {
-        errors: req.flash('errors'),
-        permission: req.session.permission,
-        name: req.session.account,
-        loginsuccess: 0
-    });
+    res.json({ permission: 'MANAGE', name: 'nguyenhongthai', loginsuccess: 0 });
+    // res.render('manage/brand/createBrand', {
+    //     errors: req.flash('errors'),
+    //     permission: req.session.permission,
+    //     name: req.session.account,
+    //     loginsuccess: 0
+    // });
 };
 // insert a Brand
 module.exports.insertBrand = (req, res) => {
-    const emp = req.body;
-    const values = [emp.brandName];
-    let errorArr = [];
+    const values = req.body;
     let successArr = [];
-    const validationErros = validationResult(req);
-    if (!validationErros.isEmpty()) {
-        const errors = Object.values(validationErros.mapped());
-        errors.forEach(item => {
-            errorArr.push(item.msg);
-        });
-        req.flash('errors', errorArr);
-        return res.redirect('/brand/insert');
-    }
 
     // query
     connectDB.query(
@@ -68,58 +61,48 @@ module.exports.insertBrand = (req, res) => {
                     message: 'Fail to query database'
                 });
             successArr.push(`Add "${values}" successful`);
-            req.flash('success', successArr);
-            res.redirect('/brand');
+            res.json({ successArr: successArr });
         }
     );
 };
 // Get update
 module.exports.getUpdateBrand = (req, res) => {
-        let id = req.params.id;
-        let sql = 'SELECT * FROM tbl_brands WHERE id = ?';
-        connectDB.query(sql, [id], (err, result) => {
+    let id = req.params.id;
+    let sql = 'SELECT * FROM tbl_brands WHERE id = ?';
+    connectDB.query(sql, [id], (err, result) => {
+        if (err) {
+            res.status(400).send({
+                status: 400,
+                message: 'Fail to query database'
+            });
+        }
+        res.json({ brand: result, permission: 'MANAGE', name: 'nguyenhongthai', loginsuccess: 0 })
+        // res.render('manage/brand/informationBrand', {
+        //     brand: result,
+        //     errors: req.flash('errors'),
+        //     permission: req.session.permission,
+        //     name: req.session.account,
+        //     loginsuccess: 0
+        // });
+    });
+}
+// update a Brand
+module.exports.updateBrand = (req, res) => {
+    const brandName = req.body;
+    let id = req.params.id;
+    console.log(brandName + ' control ' + id)
+    let successArr = [];
+    connectDB.query(
+        'UPDATE `tbl_brands` SET `brandName`= ? WHERE id = ?', [brandName, id],
+        (err, result) => {
             if (err) {
                 res.status(400).send({
                     status: 400,
                     message: 'Fail to query database'
                 });
             }
-            res.render('manage/brand/informationBrand', {
-                brand: result,
-                errors: req.flash('errors'),
-                permission: req.session.permission,
-                name: req.session.account,
-                loginsuccess: 0
-            });
-        });
-    }
-    // update a Brand
-module.exports.updateBrand = (req, res) => {
-    const emp = req.body;
-    let id = req.params.id;
-    let errorArr = [];
-    let successArr = [];
-    const validationErros = validationResult(req);
-    if (!validationErros.isEmpty()) {
-        const errors = Object.values(validationErros.mapped());
-        errors.forEach(item => {
-            errorArr.push(item.msg);
-        });
-        req.flash('errors', errorArr);
-        return res.redirect('/brand/update/' + id);
-    }
-    // query
-    connectDB.query(
-        'UPDATE `tbl_brands` SET `brandName`= ? WHERE id = ?', [emp.brandName, id],
-        (err, result) => {
-            if (err)
-                res.status(400).send({
-                    status: 400,
-                    message: 'Fail to query database'
-                });
             successArr.push(`Update successful`);
-            req.flash('success', successArr);
-            res.redirect('/brand');
+            res.json({ successArr: successArr });
         }
     );
 };
@@ -136,12 +119,10 @@ module.exports.deleteBrand = (req, res) => {
                 errorArr.push(
                     `Cannot be deleted because product exists with brand "${result[0][0].brandName}"`
                 );
-                req.flash('errors', errorArr);
-                return res.redirect('/brand');
+                return res.json({ errorArr: errorArr });
             }
             successArr.push(`Delete "${result[0][0].brandName}" successful`);
-            req.flash('success', successArr);
-            res.redirect('/brand');
+            res.json({ successArr: successArr });
         }
     );
 };
@@ -163,18 +144,15 @@ module.exports.searchBrand = (req, res) => {
             });
         if (result[0].length === 0) {
             errorArr.push('Brand not found...');
-            req.flash('errors', errorArr);
-            return res.redirect('/brand');
+            return res.json({ errorArr: errorArr });
         }
-        res.render('manage/brand/search', {
+        res.json({
             brands: result[0],
             search: search,
             page: pages,
             brandsAll: result[1],
-            errors: req.flash('errors'),
-            success: req.flash('success'),
-            permission: req.session.permission,
-            name: req.session.account,
+            permission: 'MANAGE',
+            name: 'nguyenhongthai',
             loginsuccess: 0
         });
     })

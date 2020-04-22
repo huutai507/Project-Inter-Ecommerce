@@ -9,7 +9,7 @@ const router = express.Router();
 router.get('/', controller.getBrand);
 // create brand
 router.get('/insert', controller.getCreateBrand);
-router.post('/insert', validate.brand, middleware.brandNameInsert, controller.insertBrand);
+router.post('/insert', middleware.brandNameInsert, controller.insertBrand);
 // update brand
 router.get('/update/:id', controller.getUpdateBrand);
 router.post('/update/:id', validate.brand, middleware.brandNameUpdate, controller.updateBrand);

@@ -2,10 +2,10 @@ import connectDB from '../config/connectDB';
 
 // CHECK brand name already exists INSERT
 module.exports.brandNameInsert = (req, res, next) => {
-  const brandName = req.body.brandName;
+  const values = req.body;
   connectDB.query(
     'SELECT `brandName` FROM `tbl_brands` WHERE brandName = ?',
-    [brandName],
+    [values],
     (err, rows) => {
       if (err) {
         res.status(400).send({
@@ -16,8 +16,7 @@ module.exports.brandNameInsert = (req, res, next) => {
       if (rows.length) {
         let errorArr = [];
         errorArr.push('The brand name already exists !!!');
-        req.flash('errors', errorArr);
-        return res.redirect('/brand/insert');
+        return res.json({ errorArr: errorArr });
       }
       next();
     }
@@ -26,8 +25,7 @@ module.exports.brandNameInsert = (req, res, next) => {
 
 // CHECK brand name already exists UPDATE
 module.exports.brandNameUpdate = (req, res, next) => {
-  const brandName = req.body.brandName;
-  const id = req.params.id;
+  const brandName = req.body;
   connectDB.query(
     'SELECT `brandName` FROM `tbl_brands` WHERE brandName = ?',
     [brandName],
@@ -41,8 +39,9 @@ module.exports.brandNameUpdate = (req, res, next) => {
       if (rows.length) {
         let errorArr = [];
         errorArr.push('The brand name already exists !!!');
-        req.flash('errors', errorArr);
-        return res.redirect('/brand/update/' + id);
+        // req.flash('errors', errorArr);
+        // return res.redirect('/brand/update/' + id);
+        return res.json({ errorArr: errorArr });
       }
       next();
     }
