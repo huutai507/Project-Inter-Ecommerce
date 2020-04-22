@@ -59,5 +59,6 @@ app.use((err, req, res, next) => {
 });
 // listen
 app.listen(port, host, () => {
+    console.log('hihi')
     console.log(`Listening on Front End ${host} : ${port}`);
 });

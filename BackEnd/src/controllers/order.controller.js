@@ -7,87 +7,86 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 let FCM = require('fcm-node');
 let serverKey = process.env.FCM_SERVER_KEY;
-let fcm = new FCM(serverKey);
 
 module.exports.getOrder = (req, res) => {
-        let tokenClient = req.body.tokenMessage;
-        console.log(req.body)
-        stripe.charges.create({
-            amount: req.body.totalCost * 100,
-            source: req.body.stripeTokenId,
-            currency: 'usd'
-        }).then(function() {
-            let dataClient = req.body;
-            let totalDiscount = 0;
-            for (let value of dataClient.data.cartItems) {
-                totalDiscount += value.promotion * value.inCart;
-            }
-            let totalCost = parseFloat(dataClient.totalCost)
-            const valuesCustomer = [
-                dataClient.data.name,
-                dataClient.data.dateOfBirth,
-                dataClient.data.gender,
-                dataClient.data.address,
-                dataClient.data.phoneNumber,
-                dataClient.data.email
-            ];
-            const sqlCustomer = 'INSERT INTO `tbl_customers`(`customerName`, `birthday`, `gender`, `address`, `phone`, `email`) VALUES (?)'
-            connectDB.query(sqlCustomer, [valuesCustomer],
-                (err, rows) => {
-                    const sqlEndIdCustomer = 'SELECT * FROM tbl_customers ORDER BY id DESC LIMIT 1'
-                    connectDB.query(sqlEndIdCustomer, (err, result) => {
-                        const valuesOrder = [
-                            dataClient.data.name,
-                            dataClient.data.address,
-                            dataClient.data.phoneNumber,
-                            dataClient.data.email,
-                            'New',
-                            totalDiscount,
-                            totalCost,
-                            result[0].id
-                        ];
-                        const sqlInsertOrder = 'INSERT INTO `tbl_orders`(`name`, `address`, `phone`, `email`, `status`, `discount`, `total`, `customerId`) VALUES (?)'
-                        connectDB.query(sqlInsertOrder, [valuesOrder], (err, result) => {
-                            const sqlInsertOrder = 'INSERT INTO `tbl_orderdetail`(`promotion`, `price`, `promotionPrice`, `quantity`, `amount`, `productId`, `orderId`) VALUES (?)'
-                            const sqlEndIdOrder = 'SELECT * FROM tbl_orders ORDER BY id DESC LIMIT 1'
-                            connectDB.query(sqlEndIdOrder, (err, result) => {
-                                for (let i = 0; i < dataClient.data.cartItems.length; i++) {
-                                    const valuesOrderDetail = [
-                                        dataClient.data.cartItems[i].promotion,
-                                        dataClient.data.cartItems[i].price,
-                                        dataClient.data.cartItems[i].price - dataClient.data.cartItems[i].promotion,
-                                        dataClient.data.cartItems[i].inCart,
-                                        (dataClient.data.cartItems[i].price * dataClient.data.cartItems[i].inCart) - (dataClient.data.cartItems[i].promotion * dataClient.data.cartItems[i].inCart),
-                                        dataClient.data.cartItems[i].id,
-                                        result[0].id
-                                    ]
-                                    connectDB.query(sqlInsertOrder, [valuesOrderDetail], (err, result) => {
+    let tokenClient = req.body.tokenMessage;
+    console.log(req.body)
+    stripe.charges.create({
+        amount: req.body.totalCost * 100,
+        source: req.body.stripeTokenId,
+        currency: 'usd'
+    }).then(function () {
+        let dataClient = req.body;
+        let totalDiscount = 0;
+        for (let value of dataClient.data.cartItems) {
+            totalDiscount += value.promotion * value.inCart;
+        }
+        let totalCost = parseFloat(dataClient.totalCost)
+        const valuesCustomer = [
+            dataClient.data.name,
+            dataClient.data.dateOfBirth,
+            dataClient.data.gender,
+            dataClient.data.address,
+            dataClient.data.phoneNumber,
+            dataClient.data.email
+        ];
+        const sqlCustomer = 'INSERT INTO `tbl_customers`(`customerName`, `birthday`, `gender`, `address`, `phone`, `email`) VALUES (?)'
+        connectDB.query(sqlCustomer, [valuesCustomer],
+            (err, rows) => {
+                const sqlEndIdCustomer = 'SELECT * FROM tbl_customers ORDER BY id DESC LIMIT 1'
+                connectDB.query(sqlEndIdCustomer, (err, result) => {
+                    const valuesOrder = [
+                        dataClient.data.name,
+                        dataClient.data.address,
+                        dataClient.data.phoneNumber,
+                        dataClient.data.email,
+                        'New',
+                        totalDiscount,
+                        totalCost,
+                        result[0].id
+                    ];
+                    const sqlInsertOrder = 'INSERT INTO `tbl_orders`(`name`, `address`, `phone`, `email`, `status`, `discount`, `total`, `customerId`) VALUES (?)'
+                    connectDB.query(sqlInsertOrder, [valuesOrder], (err, result) => {
+                        const sqlInsertOrder = 'INSERT INTO `tbl_orderdetail`(`promotion`, `price`, `promotionPrice`, `quantity`, `amount`, `productId`, `orderId`) VALUES (?)'
+                        const sqlEndIdOrder = 'SELECT * FROM tbl_orders ORDER BY id DESC LIMIT 1'
+                        connectDB.query(sqlEndIdOrder, (err, result) => {
+                            for (let i = 0; i < dataClient.data.cartItems.length; i++) {
+                                const valuesOrderDetail = [
+                                    dataClient.data.cartItems[i].promotion,
+                                    dataClient.data.cartItems[i].price,
+                                    dataClient.data.cartItems[i].price - dataClient.data.cartItems[i].promotion,
+                                    dataClient.data.cartItems[i].inCart,
+                                    (dataClient.data.cartItems[i].price * dataClient.data.cartItems[i].inCart) - (dataClient.data.cartItems[i].promotion * dataClient.data.cartItems[i].inCart),
+                                    dataClient.data.cartItems[i].id,
+                                    result[0].id
+                                ]
+                                connectDB.query(sqlInsertOrder, [valuesOrderDetail], (err, result) => {
 
-                                    })
-                                }
-                                const sqlEndIdOrderAndIdCustomer = 'SELECT * FROM tbl_orders ORDER BY id DESC LIMIT 1; SELECT * FROM tbl_customers ORDER BY id DESC LIMIT 1'
-                                connectDB.query(sqlEndIdOrderAndIdCustomer, (err, result) => {
-                                    const idOrder = result[0][0].id;
-                                    const idCustomer = result[1][0].id;
-                                    const sqlInsertOrder = 'INSERT INTO `tbl_paymentinfo`(`totalPayment`, `paymentDate`, `chargeId`, `orderId`, `customerId`) VALUES (?)'
-                                    let date = new Date(dataClient.token.created)
-                                        // console.log(dataClient.token.card.metadata)
-                                    let chargeId = dataClient.token.card.id
-                                    const valuesPayment = [
-                                            totalCost,
-                                            date,
-                                            chargeId,
-                                            idOrder,
-                                            idCustomer
-                                        ]
-                                        // console.log(valuesPayment)
-                                    connectDB.query(sqlInsertOrder, [valuesPayment], (err, result) => {
-                                        if (err) {
-                                            console.log(err)
-                                        } else {
-                                            let sendingProduct = '';
-                                            Object.values(dataClient.data.cartItems).map((item, index) => {
-                                                sendingProduct += `
+                                })
+                            }
+                            const sqlEndIdOrderAndIdCustomer = 'SELECT * FROM tbl_orders ORDER BY id DESC LIMIT 1; SELECT * FROM tbl_customers ORDER BY id DESC LIMIT 1'
+                            connectDB.query(sqlEndIdOrderAndIdCustomer, (err, result) => {
+                                const idOrder = result[0][0].id;
+                                const idCustomer = result[1][0].id;
+                                const sqlInsertOrder = 'INSERT INTO `tbl_paymentinfo`(`totalPayment`, `paymentDate`, `chargeId`, `orderId`, `customerId`) VALUES (?)'
+                                let date = new Date(dataClient.token.created)
+                                // console.log(dataClient.token.card.metadata)
+                                let chargeId = dataClient.token.card.id
+                                const valuesPayment = [
+                                    totalCost,
+                                    date,
+                                    chargeId,
+                                    idOrder,
+                                    idCustomer
+                                ]
+                                // console.log(valuesPayment)
+                                connectDB.query(sqlInsertOrder, [valuesPayment], (err, result) => {
+                                    if (err) {
+                                        console.log(err)
+                                    } else {
+                                        let sendingProduct = '';
+                                        Object.values(dataClient.data.cartItems).map((item, index) => {
+                                            sendingProduct += `
                                             <tbody bgcolor="#eee" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#444;line-height:18px">
                                             <tr>
                                             <td align="left" valign="top" style="padding:3px 9px">
@@ -102,15 +101,15 @@ module.exports.getOrder = (req, res) => {
                                         </tr>
                                         </tbody>
                                             `
-                                            })
-                                            let today = new Date();
-                                            let dateAndTime = `( Ngày ${today.getDate()} Tháng ${today.getMonth() + 1} Năm ${today.getFullYear()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()})`
-                                            const msg = {
-                                                to: dataClient.data.email,
-                                                from: `huutai050798@gmail.com`,
-                                                subject: `Đơn hàng #${idOrder} đã sẵn sàng giao đến quý khách`,
-                                                text: `Đơn hàng đã sẵn sàng giao đến quý khách ${dataClient.data.name}`,
-                                                html: `
+                                        })
+                                        let today = new Date();
+                                        let dateAndTime = `( Ngày ${today.getDate()} Tháng ${today.getMonth() + 1} Năm ${today.getFullYear()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()})`
+                                        const msg = {
+                                            to: dataClient.data.email,
+                                            from: `huutai050798@gmail.com`,
+                                            subject: `Đơn hàng #${idOrder} đã sẵn sàng giao đến quý khách`,
+                                            text: `Đơn hàng đã sẵn sàng giao đến quý khách ${dataClient.data.name}`,
+                                            html: `
                                             <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#dcf0f8" style="margin:0;padding:0;background-color:#f2f2f2;width:100%!important;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#444;line-height:18px">
                                             <tbody>
                                                 <tr>
@@ -236,78 +235,78 @@ module.exports.getOrder = (req, res) => {
                                             </tbody>
                                         </table>
                                             `
-                                            }
-                                            sgMail.send(msg);
-                                            let messageSendClient = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
-                                                to: tokenClient,
-                                                notification: {
-                                                    title: 'Order',
-                                                    body: 'A new order'
-                                                }
-                                            };
-
-                                            fcm.send(messageSendClient, function(err, response) {
-                                                if (err) {
-                                                    console.log("Something has gone wrong!", err);
-                                                } else {
-                                                    console.log("Successfully sent with response: ", response);
-                                                }
-                                            });
                                         }
-                                    })
+                                        sgMail.send(msg);
+                                        let messageSendClient = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+                                            to: tokenClient,
+                                            notification: {
+                                                title: 'Order',
+                                                body: 'A new order'
+                                            }
+                                        };
+                                        let fcm = new FCM(serverKey);
+                                        fcm.send(messageSendClient, function (err, response) {
+                                            if (err) {
+                                                console.log("Something has gone wrong!", err);
+                                            } else {
+                                                console.log("Successfully sent with response: ", response);
+                                            }
+                                        });
+                                    }
                                 })
                             })
                         })
                     })
-                }
-            );
-        }).catch(function() {
-            console.log('Error')
-        })
-
-    }
-    // views new order
-module.exports.viewOrder = (req, res) => {
-        const pages = parseInt(req.query.page) || 1;
-        const limit = 4;
-        const offset = (pages - 1) * limit;
-        let sql = `SELECT * FROM tbl_orderdetail, tbl_products WHERE tbl_orderdetail.productId = tbl_products.id ; SELECT * FROM tbl_orders WHERE status ='new' LIMIT ? OFFSET ?; SELECT * FROM tbl_orders WHERE status ='new'`;
-        connectDB.query(sql, [limit, offset], (err, result) => {
-            let orderDetail = result[0];
-            let order = result[1];
-            order.forEach(itemsOrder => {
-                itemsOrder.items = [];
-                orderDetail.forEach(itemsOrderDetail => {
-                    if (itemsOrder.id == itemsOrderDetail.orderId) {
-                        itemsOrder.items.push(itemsOrderDetail);
-                    }
                 })
-            });
-            res.render('manage/order/index', {
-                order: order,
-                page: pages,
-                orderAll: result[2],
-                loginsuccess: 0,
-                permission: req.session.permission,
-                name: req.session.account,
-                errors: req.flash('errors'),
-                success: req.flash('success')
+            }
+        );
+    }).catch(function () {
+        console.log('Error')
+    })
+
+}
+// views new order
+module.exports.viewOrder = (req, res) => {
+    const pages = parseInt(req.query.page) || 1;
+    const limit = 4;
+    const offset = (pages - 1) * limit;
+    let sql = `SELECT * FROM tbl_orderdetail, tbl_products WHERE tbl_orderdetail.productId = tbl_products.id ; SELECT * FROM tbl_orders WHERE status ='new' LIMIT ? OFFSET ?; SELECT * FROM tbl_orders WHERE status ='new'`;
+    connectDB.query(sql, [limit, offset], (err, result) => {
+        let orderDetail = result[0];
+        let order = result[1];
+        order.forEach(itemsOrder => {
+            itemsOrder.items = [];
+            orderDetail.forEach(itemsOrderDetail => {
+                if (itemsOrder.id == itemsOrderDetail.orderId) {
+                    itemsOrder.items.push(itemsOrderDetail);
+                }
             })
+        });
+        res.render('manage/order/index', {
+            order: order,
+            page: pages,
+            orderAll: result[2],
+            loginsuccess: 0,
+            permission: req.session.permission,
+            name: req.session.account,
+            errors: req.flash('errors'),
+            success: req.flash('success')
         })
-    }
-    // confirm order
+    })
+}
+// confirm order
 module.exports.confirmOrder = (req, res) => {
-        let id = req.params.id;
-        let successArr = [];
-        let deliver = 'Deliver';
-        let updateStatus = 'UPDATE `tbl_orders` SET `status` = ? WHERE id = ?'
-        connectDB.query(updateStatus, [deliver, id], (err, result) => {
-            successArr.push(`Confirm successful`);
-            req.flash('success', successArr);
-            res.redirect('/order')
-        })
-    }
-    //  search new ORDER
+    let id = req.params.id;
+    let successArr = [];
+    let deliver = 'Deliver';
+    let updateStatus = 'UPDATE `tbl_orders` SET `status` = ? WHERE id = ?'
+    connectDB.query(updateStatus, [deliver, id], (err, result) => {
+        successArr.push(`Confirm successful`);
+        req.flash('success', successArr);
+        res.redirect('/order')
+    })
+}
+//  search new ORDER
 module.exports.searchOrder = (req, res) => {
     let errorArr = [];
     const pages = parseInt(req.query.page) || 1;
@@ -350,34 +349,34 @@ module.exports.searchOrder = (req, res) => {
 };
 /// order confirmed
 module.exports.viewOrderConfirmed = (req, res) => {
-        const pages = parseInt(req.query.page) || 1;
-        const limit = 4;
-        const offset = (pages - 1) * limit;
-        let sql = `SELECT * FROM tbl_orderdetail, tbl_products WHERE tbl_orderdetail.productId = tbl_products.id ; SELECT * FROM tbl_orders WHERE status ='deliver' LIMIT ? OFFSET ?; SELECT * FROM tbl_orders WHERE status ='deliver'`;
-        connectDB.query(sql, [limit, offset], (err, result) => {
-            let orderDetail = result[0];
-            let order = result[1];
-            order.forEach(itemsOrder => {
-                itemsOrder.items = [];
-                orderDetail.forEach(itemsOrderDetail => {
-                    if (itemsOrder.id == itemsOrderDetail.orderId) {
-                        itemsOrder.items.push(itemsOrderDetail);
-                    }
-                })
-            });
-            res.render('manage/order/orderConfirmed', {
-                order: order,
-                page: pages,
-                orderAll: result[2],
-                loginsuccess: 0,
-                permission: req.session.permission,
-                name: req.session.account,
-                errors: req.flash('errors'),
-                success: req.flash('success')
+    const pages = parseInt(req.query.page) || 1;
+    const limit = 4;
+    const offset = (pages - 1) * limit;
+    let sql = `SELECT * FROM tbl_orderdetail, tbl_products WHERE tbl_orderdetail.productId = tbl_products.id ; SELECT * FROM tbl_orders WHERE status ='deliver' LIMIT ? OFFSET ?; SELECT * FROM tbl_orders WHERE status ='deliver'`;
+    connectDB.query(sql, [limit, offset], (err, result) => {
+        let orderDetail = result[0];
+        let order = result[1];
+        order.forEach(itemsOrder => {
+            itemsOrder.items = [];
+            orderDetail.forEach(itemsOrderDetail => {
+                if (itemsOrder.id == itemsOrderDetail.orderId) {
+                    itemsOrder.items.push(itemsOrderDetail);
+                }
             })
+        });
+        res.render('manage/order/orderConfirmed', {
+            order: order,
+            page: pages,
+            orderAll: result[2],
+            loginsuccess: 0,
+            permission: req.session.permission,
+            name: req.session.account,
+            errors: req.flash('errors'),
+            success: req.flash('success')
         })
-    }
-    //  search  ORDER confirm 
+    })
+}
+//  search  ORDER confirm 
 module.exports.searchOrderConfirmed = (req, res) => {
     let errorArr = [];
     const pages = parseInt(req.query.page) || 1;

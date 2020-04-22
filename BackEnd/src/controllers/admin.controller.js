@@ -17,10 +17,14 @@ module.exports.getAdmin = (req, res) => {
             amount += item.totalPayment;
         });;
         res.locals.total = amount.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-        res.render('manage/index', {
+        res.json({
             permission: req.session.permission,
             name: req.session.account,
-            loginsuccess: 0
+            loginsuccess: 0,
+            countUser: res.locals.countUser,
+            newOrder: res.locals.newOrder,
+            customer: res.locals.customer,
+            total: res.locals.total
         })
     })
 }

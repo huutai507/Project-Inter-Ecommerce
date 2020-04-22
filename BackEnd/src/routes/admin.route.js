@@ -4,7 +4,7 @@ import middleware from '../middleware/auth.middleware';
 
 const router = express.Router();
 
-router.get('/', middleware.requireAuth, controller.getAdmin);
+router.get('/', controller.getAdmin);
 
 
 module.exports = router;

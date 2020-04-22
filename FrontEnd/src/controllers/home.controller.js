@@ -1,7 +1,4 @@
-import connectDB from '../config/connectDB';
 import axios from 'axios'
-// let axios = require('axios');
-
 
 module.exports.getHome = (req, res) => {
     axios.get('http://localhost:4500/')
@@ -32,7 +29,6 @@ module.exports.getCart = (req, res) => {
         }).catch(() => {
             res.render('cart')
         })
-
 }
 
 module.exports.getContact = (req, res) => {
@@ -46,20 +42,8 @@ module.exports.getContact = (req, res) => {
         }).catch(() => {
             res.render('contact')
         })
-
 }
 
-module.exports.getShop = (req, res) => {
-    let sql = 'SELECT * FROM tbl_products; SELECT * FROM tbl_categories; SELECT * FROM tbl_brands ';
-    connectDB.query(sql, (err, result) => {
-        let categories = result[1];
-        let brands = result[2];
-        res.render('shop', {
-            categories: categories,
-            brands: brands
-        });
-    })
-}
 //  product detail
 module.exports.productDetail = (req, res) => {
     axios.get('http://localhost:4500/product-details')
@@ -77,7 +61,6 @@ module.exports.productDetail = (req, res) => {
 // filter category
 module.exports.filterCategory = (req, res) => {
     let categoryId = req.params.id;
-    console.log(categoryId)
     axios.get('http://localhost:4500/filter-category/' + categoryId)
         .then((response) => {
             let { products, categories, brands, errors, jsonData } = response.data;
@@ -118,7 +101,6 @@ module.exports.search = (req, res) => {
     const search = req.query.key;
     axios.get('http://localhost:4500/search/?key=' + search)
         .then((response) => {
-            console.log(response.data)
             let { products, categories, brands, errors, jsonData } = response.data
             res.render('main/filter/filter', {
                 products,

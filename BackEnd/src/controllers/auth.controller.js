@@ -2,7 +2,7 @@ import sha1 from 'sha1';
 import connectDB from '../config/connectDB';
 import { validationResult } from 'express-validator/check';
 
-module.exports.login = function(req, res) {
+module.exports.login = function (req, res) {
     res.render('./auth/login', {
         errors: req.flash('errors'),
     });
@@ -19,33 +19,36 @@ module.exports.loginPost = (req, res) => {
                     message: 'Fail to query database'
                 });
             else {
-                let errorArr = [];
+
                 if (!result[0].length) {
-                    errorArr.push('Acount does not exist !!!');
-                    req.flash('errors', errorArr);
-                    return res.redirect('/auth/login');
+                    res.json({ accountNotExist: true });
+                    return;
                 }
                 if (result[0][0].password !== hashPassword) {
-                    errorArr.push('Wrong account or password !!!');
-                    req.flash('errors', errorArr);
-                    return res.redirect('/auth/login');
+                    res.json({ wrongPassword: true });
+                    return;
                 }
                 res.locals.countUser = result[1].length;
                 res.locals.newOrder = result[2].length;
                 res.locals.customer = result[3].length;
                 let amount = 0;
                 result[3].forEach(item => {
-                amount += item.totalPayment;
+                    amount += item.totalPayment;
                 });;
                 res.locals.total = amount.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
                 req.session.account = accountName;
                 req.session.permission = result[0][0].permission;
-                req.flash('success', `Welcome back <span style="color: red"> ${accountName} </span> !!!`);
-                res.render('manage/index', {
-                    loginsuccess: req.flash('success'),
+                res.json({
                     permission: result[0][0].permission,
-                    name: accountName
-                });
+                    name: accountName,
+                    countUser: res.locals.countUser,
+                    newOrder: res.locals.newOrder,
+                    customer: res.locals.customer,
+                    total: res.locals.total,
+                    accountSS: req.session.account,
+                    permissionSS: result[0][0].permission
+
+                })
             }
         }
     );
@@ -114,9 +117,6 @@ module.exports.createRegister = (req, res) => {
 // Logout
 module.exports.logout = (req, res) => {
     req.session.destroy(err => {
-        if (err) {
-            console.log(err);
-        }
+        console.log('delete', err)
     });
-    res.redirect('/auth/login');
 };
