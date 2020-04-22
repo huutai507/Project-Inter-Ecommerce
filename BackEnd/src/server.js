@@ -18,7 +18,7 @@ import cors from 'cors';
 //Init app
 const app = express();
 
-const port = process.env.APP_PORT || 4000;
+const port = process.env.APP_PORT || 4500;
 const host = process.env.APP_HOST || 'localhost';
 
 
@@ -39,7 +39,7 @@ app.use('/', homeRoute);
 app.use('/user', userRoute);
 app.use('/product', requireAuth.requireAuth, productRoute);
 app.use('/category', requireAuth.requireAuth, categoryRoute);
-app.use('/brand', requireAuth.requireAuth, brandRoute);
+app.use('/brand',/* requireAuth.requireAuth,*/ brandRoute);
 app.use('/auth', authRoute);
 app.use('/customer', requireAuth.requireAuth, customerRoute);
 app.use('/order', orderRoute);

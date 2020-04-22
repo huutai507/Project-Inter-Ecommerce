@@ -9,7 +9,7 @@ module.exports.getHome = (req, res) => {
     let sql = 'SELECT * FROM tbl_products; SELECT * FROM tbl_categories; SELECT * FROM tbl_brands ';
     connectDB.query(sql, (err, result) => {
         let dataProductJSON = JSON.stringify(result[0]);
-        let [products, categories, brands] = result
+        let [products, categories, brands] = result;
         res.json({ products, categories, brands, errors: '', jsonData: dataProductJSON })
     })
 }

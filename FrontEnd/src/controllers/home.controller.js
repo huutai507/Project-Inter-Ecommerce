@@ -1,5 +1,4 @@
-// import connectDB from '../config/connectDB';
-let axios = require('axios');
+import axios from 'axios'
 
 module.exports.getHome = (req, res) => {
     axios.get('http://localhost:4500/')
@@ -13,6 +12,7 @@ module.exports.getHome = (req, res) => {
                 jsonData
             })
         }).catch((error) => {
+
             res.render('index');
         })
 }
@@ -44,17 +44,6 @@ module.exports.getContact = (req, res) => {
         })
 }
 
-module.exports.getShop = (req, res) => {
-    let sql = 'SELECT * FROM tbl_products; SELECT * FROM tbl_categories; SELECT * FROM tbl_brands ';
-    connectDB.query(sql, (err, result) => {
-        let categories = result[1];
-        let brands = result[2];
-        res.render('shop', {
-            categories: categories,
-            brands: brands
-        });
-    })
-}
 //  product detail
 module.exports.productDetail = (req, res) => {
     axios.get('http://localhost:4500/product-details')
