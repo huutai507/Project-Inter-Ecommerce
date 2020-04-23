@@ -14,43 +14,19 @@ module.exports.getCategory = (req, res) => {
                 message: 'Fail to query database'
             });
         }
-        res.render('manage/category/index', {
-            category: result[0],
-            categoryAll: result[1],
-            page: pages,
-            errors: req.flash('errors'),
-            success: req.flash('success'),
-            permission: req.session.permission,
-            name: req.session.account,
-            loginsuccess: 0
-        });
+        let [category, categoryAll] = [result[0], result[1]];
+        res.json({ category, categoryAll, page: pages, loginsuccess: 0 })
     });
 };
 
 // get insert
 module.exports.getInsertCategory = (req, res) => {
-    res.render('manage/category/createCategory', {
-        errors: req.flash('errors'),
-        permission: req.session.permission,
-        name: req.session.account,
-        loginsuccess: 0
-    });
+    res.json({ loginsuccess: 0 });
 };
 // insert a Category
 module.exports.insertCategory = (req, res) => {
-    const emp = req.body;
-    const values = [emp.categoryName];
-    let errorArr = [];
+    const values = req.body;
     let successArr = [];
-    const validationErros = validationResult(req);
-    if (!validationErros.isEmpty()) {
-        const errors = Object.values(validationErros.mapped());
-        errors.forEach(item => {
-            errorArr.push(item.msg);
-        });
-        req.flash('errors', errorArr);
-        return res.redirect('/category/insert');
-    }
     // query
     connectDB.query(
         'INSERT INTO `tbl_categories`(`categoryName`) VALUES (?)', [values],
@@ -61,8 +37,7 @@ module.exports.insertCategory = (req, res) => {
                     message: 'Fail to query database'
                 });
             successArr.push(`Add "${values}" successful`);
-            req.flash('success', successArr);
-            res.redirect('/category');
+            res.json({ successArr: successArr });
         }
     );
 };
@@ -76,44 +51,26 @@ module.exports.getUpdateCategory = (req, res) => {
                 status: 400,
                 message: 'Fail to query database'
             });
-        } else {
-            res.render('manage/category/informationCategory', {
-                category: result,
-                errors: req.flash('errors'),
-                permission: req.session.permission,
-                name: req.session.account,
-                loginsuccess: 0
-            });
         }
+        res.json({ category: result, loginsuccess: 0 })
     });
 };
 // update Category
 module.exports.updateCategory = (req, res) => {
-    const emp = req.body;
+    const categoryName = req.body;
     let id = req.params.id;
-    const errorArr = [];
     let successArr = [];
-    const validationErros = validationResult(req);
-    if (!validationErros.isEmpty()) {
-        const errors = Object.values(validationErros.mapped());
-        errors.forEach(item => {
-            errorArr.push(item.msg);
-        });
-        req.flash('errors', errorArr);
-        return res.redirect('/category/update/' + id);
-    }
-    // query
     connectDB.query(
-        'UPDATE `tbl_categories` SET `categoryName`=? WHERE id = ?', [emp.categoryName, id],
+        'UPDATE `tbl_categories` SET `categoryName`=? WHERE id = ?', [categoryName, id],
         (err, result) => {
-            if (err)
+            if (err) {
                 res.status(400).send({
                     status: 400,
                     message: 'Fail to query database'
                 });
+            }
             successArr.push(`Update successful`);
-            req.flash('success', successArr);
-            res.redirect('/category');
+            res.json({ successArr: successArr });
         }
     );
 };
@@ -130,12 +87,10 @@ module.exports.deleteCategory = (req, res) => {
                 errorArr.push(
                     `Cannot be deleted because product exists with categories "${result[0][0].categoryName}"`
                 );
-                req.flash('errors', errorArr);
-                return res.redirect('/category');
+                return res.json({ errorArr: errorArr });
             }
             successArr.push(`Delete "${result[0][0].categoryName}" successful`);
-            req.flash('success', successArr);
-            res.redirect('/category');
+            res.json({ successArr: successArr });
         }
     );
 };
@@ -156,19 +111,14 @@ module.exports.searchCategory = (req, res) => {
             });
         if (result[0].length === 0) {
             errorArr.push('Category not found...');
-            req.flash('errors', errorArr);
-            return res.redirect('../category');
-        } else
-            res.render('manage/category/search', {
-                category: result[0],
-                search: search,
-                page: pages,
-                categoryAll: result[1],
-                errors: req.flash('errors'),
-                success: req.flash('success'),
-                permission: req.session.permission,
-                name: req.session.account,
-                loginsuccess: 0
-            });
-    });
+            return res.json({ errorArr: errorArr });
+        }
+        res.json({
+            category: result[0],
+            search: search,
+            page: pages,
+            categoryAll: result[1],
+            loginsuccess: 0
+        });
+    })
 };

@@ -2,10 +2,10 @@ import connectDB from '../config/connectDB';
 
 // CHECK category name already exists INSERT
 module.exports.categoryNameInsert = (req, res, next) => {
-  const categoryName = req.body.categoryName;
+  const values = req.body;
   connectDB.query(
     'SELECT `categoryName` FROM `tbl_categories` WHERE categoryName = ?',
-    [categoryName],
+    [values],
     (err, rows) => {
       if (err) {
         res.status(400).send({
@@ -16,8 +16,7 @@ module.exports.categoryNameInsert = (req, res, next) => {
       if (rows.length) {
         let errorArr = [];
         errorArr.push('The category name already exists !!!');
-        req.flash('errors', errorArr);
-        return res.redirect('/category/insert');
+        return res.json({ errorArr: errorArr });
       }
       next();
     }
@@ -26,8 +25,7 @@ module.exports.categoryNameInsert = (req, res, next) => {
 
 // CHECK category name already exists UPDATE
 module.exports.categoryNameUpdate = (req, res, next) => {
-  const categoryName = req.body.categoryName;
-  const id = req.params.id;
+  const categoryName = req.body;
   connectDB.query(
     'SELECT `categoryName` FROM `tbl_categories` WHERE categoryName = ?',
     [categoryName],
@@ -41,8 +39,7 @@ module.exports.categoryNameUpdate = (req, res, next) => {
       if (rows.length) {
         let errorArr = [];
         errorArr.push('The category name already exists !!!');
-        req.flash('errors', errorArr);
-        return res.redirect('/category/update/' + id);
+        return res.json({ errorArr: errorArr });
       }
       next();
     }

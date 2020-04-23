@@ -1,6 +1,6 @@
 import { validationResult } from 'express-validator/check';
 import connectDB from '../config/connectDB';
-import per from '../controllers/auth.controller'
+
 let FCM = require('fcm-node');
 let serverKey = 'AAAALvxje6Q:APA91bEflP9zXkHTBit9aQUOvyay-1CmNvIuRaIJ7gwTt_uAQNcZZN8fSU0fwi7CNdfoZXSa4_THvnQo6tQuHjAOiHMcfvNkxOfc-2WjDsNRa0vP32aOx1Hx-xC6FyAL_fZ7nA8M4t5k'; //put your server key here
 let fcm = new FCM(serverKey);
@@ -33,7 +33,6 @@ module.exports.getCreateBrand = (req, res) => {
 module.exports.insertBrand = (req, res) => {
     const values = req.body;
     let successArr = [];
-
     // query
     connectDB.query(
         'INSERT INTO `tbl_brands`(`brandName`) VALUES (?)', [values],
@@ -66,7 +65,6 @@ module.exports.getUpdateBrand = (req, res) => {
 module.exports.updateBrand = (req, res) => {
     const brandName = req.body;
     let id = req.params.id;
-    console.log(brandName + ' control ' + id)
     let successArr = [];
     connectDB.query(
         'UPDATE `tbl_brands` SET `brandName`= ? WHERE id = ?', [brandName, id],

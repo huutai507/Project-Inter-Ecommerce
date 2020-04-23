@@ -38,7 +38,7 @@ app.use('/', homeRoute);
 app.use('/user', userRoute);
 app.use('/product', requireAuth.requireAuth, productRoute);
 app.use('/category', requireAuth.requireAuth, categoryRoute);
-app.use('/brand',/* requireAuth.requireAuth,*/ brandRoute);
+app.use('/brand', requireAuth.requireAuth, brandRoute);
 app.use('/auth', authRoute);
 app.use('/customer', requireAuth.requireAuth, customerRoute);
 app.use('/order', orderRoute);
