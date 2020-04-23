@@ -132,7 +132,6 @@ module.exports.createRegister = (req, res) => {
 // Logout
 module.exports.logout = (req, res) => {
     req.session.destroy(err => {
-        console.log('delete', err)
     });
     res.redirect('/auth/login')
 };
