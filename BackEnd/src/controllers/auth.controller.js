@@ -69,7 +69,6 @@ module.exports.createRegister = (req, res) => {
     let successArr = [];
     const validationErros = validationResult(req);
     const emp = req.body;
-    // const permission = 'NHANVIEN';
     const hashPassword = sha1(emp.password);
     const values = [
         emp.userName,

@@ -39,8 +39,6 @@ module.exports.brandNameUpdate = (req, res, next) => {
       if (rows.length) {
         let errorArr = [];
         errorArr.push('The brand name already exists !!!');
-        // req.flash('errors', errorArr);
-        // return res.redirect('/brand/update/' + id);
         return res.json({ errorArr: errorArr });
       }
       next();
