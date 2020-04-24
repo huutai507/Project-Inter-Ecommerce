@@ -37,14 +37,14 @@ configSS(app);
 
 app.use('/', homeRoute);
 app.use('/user', userRoute);
-app.use('/product', requireAuth.requireAuth, productRoute);
-app.use('/category', categoryRoute);
-app.use('/brand', brandRoute);
+app.use('/product', productRoute);
+app.use('/category', requireAuth.requireAuth, categoryRoute);
+app.use('/brand',/* requireAuth.requireAuth,*/ brandRoute);
 app.use('/auth', authRoute);
 app.use('/customer', customerRoute);
 app.use('/order', orderRoute);
 app.use('/admin', adminRoute);
-app.use('/payment', requireAuth.requireAuth, paymentRoute);
+app.use('/payment', paymentRoute);
 
 
 // app Erros

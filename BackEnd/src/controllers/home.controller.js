@@ -5,7 +5,6 @@ const stripePublicKey = process.env.STRIPE_PUBLIC_KEY
 const stripe = require('stripe')(stripeSecretKey)
 
 module.exports.getHome = (req, res) => {
-    console.log('im here')
     let sql = 'SELECT * FROM tbl_products; SELECT * FROM tbl_categories; SELECT * FROM tbl_brands ';
     connectDB.query(sql, (err, result) => {
         let dataProductJSON = JSON.stringify(result[0]);

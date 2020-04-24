@@ -1,3 +1,4 @@
+require('dotenv').config()
 let cloudinary = require('cloudinary').v2;
 
 cloudinary.config({

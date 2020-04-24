@@ -39,7 +39,7 @@
                         <button class="btn btn-primary ml-3"> Search Product</button>
                     </form>
                     <div class="productInfomation container d-flex justify-content-around flex-column table-responsive">
-                        <table class="table table-striped" style="color: black;">
+                        <table class="table table-striped" style="color: black; font-size: 13px;">
                             <thead>
                                 <tr>
                                     <th scope="col">ID</th>
@@ -94,7 +94,7 @@
                                         <% item.description = item.description.replace(/(<([^>]+)>)/ig, "");%>
                                         <textarea name="description" id="editor" cols="30" rows="10">
                                              <%= item.description %>
-                                        </textarea>                                     
+                                        </textarea>
                                     </td>
                                     <td>
                                         <%= item.price %>

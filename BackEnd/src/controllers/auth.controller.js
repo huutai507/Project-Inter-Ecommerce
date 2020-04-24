@@ -56,18 +56,14 @@ module.exports.loginPost = (req, res) => {
 // register
 
 module.exports.register = (req, res) => {
-    res.render('./auth/register', {
-        errors: req.flash('errors'),
+    res.json({
         permission: req.session.permission,
         name: req.session.account,
         loginsuccess: 0
-    });
+    })
 };
 // register user Post
 module.exports.createRegister = (req, res) => {
-    let errorArr = [];
-    let successArr = [];
-    const validationErros = validationResult(req);
     const emp = req.body;
     const hashPassword = sha1(emp.password);
     const values = [
@@ -89,26 +85,15 @@ module.exports.createRegister = (req, res) => {
                 });
             }
             if (rows.length) {
-                errorArr.push('The account already exists!!!');
-                req.flash('errors', errorArr);
-                return res.redirect('/auth/register');
+                res.json({ accountExist: true });
+                return;
             }
-            // handle errors data insert 
-            if (!validationErros.isEmpty()) {
-                const errors = Object.values(validationErros.mapped());
-                errors.forEach(item => {
-                    errorArr.push(item.msg);
-                });
-                req.flash('errors', errorArr);
-                return res.redirect('/auth/register');
-            } else {
-                connectDB.query(
-                    'INSERT INTO `tbl_users`(`userName`, `phone`, `account`, `password`,`permission`,`email`) VALUES (?)', [values]
-                );
-                successArr.push('Register success!!!');
-                req.flash('success', successArr);
-                res.redirect('/user');
-            }
+
+            connectDB.query(
+                'INSERT INTO `tbl_users`(`userName`, `phone`, `account`, `password`,`permission`,`email`) VALUES (?)', [values]
+            );
+            res.json({ successRegister: true })
+            return
         }
     );
 };

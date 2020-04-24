@@ -10,11 +10,11 @@ const router = express.Router();
 router.get('/', controller.getProducts);
 // insert a product
 router.get('/insert', controller.getInsertProduct);
-router.post('/insert', upload.single('image'), validate.product, middleware.productNameInsert, controller.insertProduct);
+router.post('/insert', upload.single('image'), validate.product, controller.insertProduct);
 // update a product
 
 router.get('/update/:id', controller.getUpdateProduct);
-router.post('/update/:id', upload.single('image'), validate.product, middleware.productNameUpdate, controller.updateProduct);
+router.post('/update/:id', upload.single('image'), validate.product, controller.updateProduct);
 // delete a product
 
 router.get('/delete/:id', controller.deleteProduct);

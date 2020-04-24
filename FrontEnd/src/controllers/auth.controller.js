@@ -1,5 +1,6 @@
 
 import axios from 'axios';
+import { validationResult } from 'express-validator/check';
 module.exports.login = function (req, res) {
     axios.get('http://localhost:4500/auth/login')
         .then(() => {
@@ -71,62 +72,45 @@ module.exports.loginPost = (req, res) => {
 // register
 
 module.exports.register = (req, res) => {
-    res.render('./auth/register', {
-        errors: req.flash('errors'),
-        permission: req.session.permission,
-        name: req.session.account,
-        loginsuccess: 0
-    });
+    axios.get('http://localhost:4500/auth/register')
+        .then((response) => {
+            let { permission, name, loginsuccess } = response.data
+            res.render('auth/register', {
+                permission,
+                name,
+                loginsuccess,
+                errors: req.flash('errors')
+            })
+        })
+
 };
 // register user Post
 module.exports.createRegister = (req, res) => {
-    // let errorArr = [];
-    // let successArr = [];
-    // const validationErros = validationResult(req);
-    // const emp = req.body;
-    // // const permission = 'NHANVIEN';
-    // const hashPassword = sha1(emp.password);
-    // const values = [
-    //     emp.userName,
-    //     emp.phone,
-    //     emp.account,
-    //     hashPassword,
-    //     emp.permission,
-    //     emp.email
-    // ];
-    // const accounts = req.body.account;
-    // connectDB.query(
-    //     'SELECT account FROM tbl_users WHERE account = ?', [accounts],
-    //     (err, rows) => {
-    //         if (err) {
-    //             res.status(400).send({
-    //                 status: 400,
-    //                 message: 'Fail to query database'
-    //             });
-    //         }
-    //         if (rows.length) {
-    //             errorArr.push('The account already exists!!!');
-    //             req.flash('errors', errorArr);
-    //             return res.redirect('/auth/register');
-    //         }
-    //         // handle errors data insert 
-    //         if (!validationErros.isEmpty()) {
-    //             const errors = Object.values(validationErros.mapped());
-    //             errors.forEach(item => {
-    //                 errorArr.push(item.msg);
-    //             });
-    //             req.flash('errors', errorArr);
-    //             return res.redirect('/auth/register');
-    //         } else {
-    //             connectDB.query(
-    //                 'INSERT INTO `tbl_users`(`userName`, `phone`, `account`, `password`,`permission`,`email`) VALUES (?)', [values]
-    //             );
-    //             successArr.push('Register success!!!');
-    //             req.flash('success', successArr);
-    //             res.redirect('/user');
-    //         }
-    //     }
-    // );
+    let errorArr = [];
+    let successArr = [];
+    const validationErros = validationResult(req);
+    if (!validationErros.isEmpty()) {
+        const errors = Object.values(validationErros.mapped());
+        errors.forEach(item => {
+            errorArr.push(item.msg);
+        });
+        req.flash('errors', errorArr);
+        return res.redirect('/auth/register');
+    }
+    axios.post('http://localhost:4500/auth/register', req.body)
+        .then((response) => {
+            let { accountExist, successRegister } = response.data
+            if (accountExist) {
+                errorArr.push('The account already exists!!!');
+                req.flash('errors', errorArr);
+                return res.redirect('/auth/register');
+            }
+            if (successRegister) {
+                successArr.push('Register success!!!');
+                req.flash('success', successArr);
+                res.redirect('/user');
+            }
+        })
 };
 
 // Logout
