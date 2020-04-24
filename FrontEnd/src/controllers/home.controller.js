@@ -12,8 +12,13 @@ module.exports.getHome = (req, res) => {
                 jsonData
             })
         }).catch((error) => {
-
-            res.render('index');
+            res.render('index', {
+                products: [],
+                categories: [],
+                brands: [],
+                errors: '',
+                jsonData: []
+            })
         })
 }
 // cart
@@ -27,7 +32,11 @@ module.exports.getCart = (req, res) => {
                 brands
             })
         }).catch(() => {
-            res.render('cart')
+            res.render('cart', {
+                stripePublicKey: '',
+                categories: [],
+                brands: []
+            })
         })
 }
 
@@ -40,7 +49,11 @@ module.exports.getContact = (req, res) => {
                 brands
             })
         }).catch(() => {
-            res.render('contact')
+            res.render('contact', {
+                categories: [],
+                brands: []
+            }
+            )
         })
 }
 
@@ -54,7 +67,10 @@ module.exports.productDetail = (req, res) => {
                 brands
             })
         }).catch(() => {
-            res.render('productDetail')
+            res.render('productDetail', {
+                categories: [],
+                brands: []
+            })
         })
 
 }
@@ -73,7 +89,13 @@ module.exports.filterCategory = (req, res) => {
             })
         })
         .catch(() => {
-            res.render('main/filter/filter')
+            res.render('main/filter/filter', {
+                products: [],
+                categories: [],
+                brands: [],
+                errors: '',
+                jsonData: []
+            })
         })
 
 }
@@ -92,7 +114,13 @@ module.exports.filterBrand = (req, res) => {
             })
         })
         .catch(() => {
-            res.render('main/filter/filter')
+            res.render('main/filter/filter', {
+                products: [],
+                categories: [],
+                brands: [],
+                errors: '',
+                jsonData: []
+            })
         })
 }
 
@@ -111,7 +139,13 @@ module.exports.search = (req, res) => {
             })
         })
         .catch(() => {
-            res.render('main/filter/filter')
+            res.render('main/filter/filter', {
+                products: [],
+                categories: [],
+                brands: [],
+                errors: '',
+                jsonData: []
+            })
         })
 };
 // filter price
@@ -130,6 +164,12 @@ module.exports.filterPrice = (req, res) => {
             })
         })
         .catch(() => {
-            res.render('main/filter/filter')
+            res.render('main/filter/filter', {
+                products: [],
+                categories: [],
+                brands: [],
+                errors: '',
+                jsonData: []
+            })
         })
 };

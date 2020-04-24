@@ -1,4 +1,5 @@
 import connectDB from '../config/connectDB';
+import alert from 'alert-node';
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY
 const stripePublicKey = process.env.STRIPE_PUBLIC_KEY
 const stripe = require('stripe')(stripeSecretKey)
@@ -10,12 +11,11 @@ let serverKey = process.env.FCM_SERVER_KEY;
 
 module.exports.getOrder = (req, res) => {
     let tokenClient = req.body.tokenMessage;
-    console.log(req.body)
     stripe.charges.create({
         amount: req.body.totalCost * 100,
         source: req.body.stripeTokenId,
         currency: 'usd'
-    }).then(function () {
+    }).then(() => {
         let dataClient = req.body;
         let totalDiscount = 0;
         for (let value of dataClient.data.cartItems) {
@@ -237,6 +237,8 @@ module.exports.getOrder = (req, res) => {
                                             `
                                         }
                                         sgMail.send(msg);
+
+                                        let fcm = new FCM(serverKey);
                                         let messageSendClient = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
                                             to: tokenClient,
                                             notification: {
@@ -244,7 +246,6 @@ module.exports.getOrder = (req, res) => {
                                                 body: 'A new order'
                                             }
                                         };
-                                        let fcm = new FCM(serverKey);
                                         fcm.send(messageSendClient, function (err, response) {
                                             if (err) {
                                                 console.log("Something has gone wrong!", err);
@@ -259,9 +260,11 @@ module.exports.getOrder = (req, res) => {
                     })
                 })
             }
+
         );
-    }).catch(function () {
-        console.log('Error')
+
+    }).catch(function (err) {
+        console.log(err)
     })
 
 }
@@ -272,8 +275,7 @@ module.exports.viewOrder = (req, res) => {
     const offset = (pages - 1) * limit;
     let sql = `SELECT * FROM tbl_orderdetail, tbl_products WHERE tbl_orderdetail.productId = tbl_products.id ; SELECT * FROM tbl_orders WHERE status ='new' LIMIT ? OFFSET ?; SELECT * FROM tbl_orders WHERE status ='new'`;
     connectDB.query(sql, [limit, offset], (err, result) => {
-        let orderDetail = result[0];
-        let order = result[1];
+        let [orderDetail, order, orderAll] = result
         order.forEach(itemsOrder => {
             itemsOrder.items = [];
             orderDetail.forEach(itemsOrderDetail => {
@@ -282,40 +284,33 @@ module.exports.viewOrder = (req, res) => {
                 }
             })
         });
-        res.render('manage/order/index', {
-            order: order,
+        res.json({
+            order,
             page: pages,
-            orderAll: result[2],
+            orderAll,
             loginsuccess: 0,
             permission: req.session.permission,
-            name: req.session.account,
-            errors: req.flash('errors'),
-            success: req.flash('success')
+            name: req.session.account
         })
     })
 }
 // confirm order
 module.exports.confirmOrder = (req, res) => {
     let id = req.params.id;
-    let successArr = [];
     let deliver = 'Deliver';
     let updateStatus = 'UPDATE `tbl_orders` SET `status` = ? WHERE id = ?'
     connectDB.query(updateStatus, [deliver, id], (err, result) => {
-        successArr.push(`Confirm successful`);
-        req.flash('success', successArr);
-        res.redirect('/order')
+        res.json({ confirmOrder: true })
     })
 }
 //  search new ORDER
 module.exports.searchOrder = (req, res) => {
-    let errorArr = [];
     const pages = parseInt(req.query.page) || 1;
     const limit = 4;
     const offset = (pages - 1) * limit;
     const search = req.query.key;
     connectDB.query(`SELECT * from  tbl_orderdetail, tbl_products WHERE tbl_orderdetail.productId = tbl_products.id ; SELECT * FROM tbl_orders WHERE (name LIKE '%${search}%' OR address LIKE '%${search}%' OR phone LIKE '%${search}%' OR email LIKE '%${search}%') AND status='new' LIMIT ? OFFSET ?; SELECT * FROM tbl_orders WHERE (name LIKE '%${search}%' OR address LIKE '%${search}%' OR phone LIKE '%${search}%' OR email LIKE '%${search}%')  AND status='new';`, [limit, offset], (err, result) => {
-        let orderDetail = result[0];
-        let order = result[1];
+        let [orderDetail, order, orderAll] = result
         order.forEach(itemsOrder => {
             itemsOrder.items = [];
             orderDetail.forEach(itemsOrderDetail => {
@@ -329,22 +324,17 @@ module.exports.searchOrder = (req, res) => {
                 status: 400,
                 message: 'Fail to query database'
             });
-        if (result[1].length === 0) {
-            errorArr.push('No order found...');
-            req.flash('errors', errorArr);
-            return res.redirect('/order');
-        }
-        res.render('manage/order/search', {
-            order: order,
-            search: search,
+        res.json({
+            order,
+            search,
             page: pages,
-            orderAll: result[2],
-            errors: req.flash('errors'),
-            success: req.flash('success'),
+            orderAll,
             permission: req.session.permission,
             name: req.session.account,
-            loginsuccess: 0
-        });
+            loginsuccess: 0,
+            orderDetail
+
+        })
     })
 };
 /// order confirmed
@@ -354,8 +344,7 @@ module.exports.viewOrderConfirmed = (req, res) => {
     const offset = (pages - 1) * limit;
     let sql = `SELECT * FROM tbl_orderdetail, tbl_products WHERE tbl_orderdetail.productId = tbl_products.id ; SELECT * FROM tbl_orders WHERE status ='deliver' LIMIT ? OFFSET ?; SELECT * FROM tbl_orders WHERE status ='deliver'`;
     connectDB.query(sql, [limit, offset], (err, result) => {
-        let orderDetail = result[0];
-        let order = result[1];
+        let [orderDetail, order, orderAll] = result;
         order.forEach(itemsOrder => {
             itemsOrder.items = [];
             orderDetail.forEach(itemsOrderDetail => {
@@ -364,16 +353,15 @@ module.exports.viewOrderConfirmed = (req, res) => {
                 }
             })
         });
-        res.render('manage/order/orderConfirmed', {
-            order: order,
+        res.json({
+            order,
             page: pages,
-            orderAll: result[2],
+            orderAll,
             loginsuccess: 0,
             permission: req.session.permission,
-            name: req.session.account,
-            errors: req.flash('errors'),
-            success: req.flash('success')
+            name: req.session.account
         })
+
     })
 }
 //  search  ORDER confirm 
@@ -384,8 +372,7 @@ module.exports.searchOrderConfirmed = (req, res) => {
     const offset = (pages - 1) * limit;
     const search = req.query.key;
     connectDB.query(`SELECT * from  tbl_orderdetail, tbl_products WHERE tbl_orderdetail.productId = tbl_products.id ; SELECT * FROM tbl_orders WHERE (name LIKE '%${search}%' OR address LIKE '%${search}%' OR phone LIKE '%${search}%' OR email LIKE '%${search}%') AND status='deliver' LIMIT ? OFFSET ?; SELECT * FROM tbl_orders WHERE (name LIKE '%${search}%' OR address LIKE '%${search}%' OR phone LIKE '%${search}%' OR email LIKE '%${search}%')  AND status='deliver';`, [limit, offset], (err, result) => {
-        let orderDetail = result[0];
-        let order = result[1];
+        let [orderDetail, order, orderAll] = result;
         order.forEach(itemsOrder => {
             itemsOrder.items = [];
             orderDetail.forEach(itemsOrderDetail => {
@@ -404,16 +391,16 @@ module.exports.searchOrderConfirmed = (req, res) => {
             req.flash('errors', errorArr);
             return res.redirect('/order/order-confirmed');
         }
-        res.render('manage/order/searchOrderConfirm', {
-            order: order,
-            search: search,
+        res.json({
+            order,
+            search,
             page: pages,
-            orderAll: result[2],
-            errors: req.flash('errors'),
-            success: req.flash('success'),
+            orderAll,
             permission: req.session.permission,
             name: req.session.account,
-            loginsuccess: 0
-        });
+            loginsuccess: 0,
+
+        })
+
     })
 };

@@ -69,16 +69,17 @@
                                                     <label for="inputProductImage">Image</label>
                                                     <img style="height: 100px ;height: 100px;" src=" <%= item.image %>"
                                                         alt="">
-                                                    <input type="file" class="form-control" name="image" required
-                                                        value="<%= item.image %>">
+                                                    <input type="file" class="form-control" required>
                                                 </div>
                                                 <div class="form-label-group">
                                                     <!-- <label for="inputProductDescription">Description</label>
                                                     <input type="text" id="inputProductDescription" class="form-control"
                                                         name="description" value="<%= item.description %>"
                                                         placeholder="Email address" required> -->
-                                                        <label for="inputProductDescription">Description</label>
-                                                        <textarea name="description" class="form-control" id="editor" cols="30" rows="10" value="<%= item.description %>"><%= item.description %></textarea> 
+                                                    <label for="inputProductDescription">Description</label>
+                                                    <textarea name="description" class="form-control" id="editor"
+                                                        cols="30" rows="10"
+                                                        value="<%= item.description %>"><%= item.description %></textarea>
                                                 </div>
                                                 <div class="form-label-group mt-3">
                                                     <label for="inputProductPrice">Price</label>

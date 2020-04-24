@@ -11,6 +11,7 @@
     <link href="/plugins/fontawesome-free-5.0.1/css/fontawesome-all.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="/stylesheets/styles/cart_styles.css" />
     <link rel="stylesheet" type="text/css" href="/stylesheets/styles/cart_responsive.css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://checkout.stripe.com/checkout.js" defer></script>
     <script>
         let stripePublicKey = '<%= stripePublicKey %>'
@@ -23,17 +24,17 @@
         <!-- Header -->
         <%- include("main/header/header"); %>
 
-            <!-- Cart -->
+        <!-- Cart -->
 
-            <%- include("cart/cartSection"); %>
+        <%- include("cart/cartSection"); %>
 
-                <!-- Footer -->
+        <!-- Footer -->
 
-                <%- include("main/footer/footer"); %>
+        <%- include("main/footer/footer"); %>
 
-                    <!-- Copyright -->
+        <!-- Copyright -->
 
-                    <%- include("main/copyright/copyright"); %>
+        <%- include("main/copyright/copyright"); %>
     </div>
     <script src="/javascript/js/jquery-3.3.1.min.js"></script>
     <script src="/stylesheets/styles/bootstrap4/popper.js"></script>

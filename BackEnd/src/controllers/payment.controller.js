@@ -7,21 +7,20 @@ module.exports.getPayment = (req, res) => {
     let sqlGetpayment = 'SELECT * FROM tbl_paymentinfo, tbl_orders WHERE tbl_paymentinfo.orderId = tbl_orders.id LIMIT ? OFFSET ?; SELECT * FROM tbl_paymentinfo, tbl_orders WHERE tbl_paymentinfo.orderId = tbl_orders.id';
 
     connectDB.query(sqlGetpayment, [limit, offset], (err, result) => {
-        res.render('manage/paymentInfo/index', {
-            result: result[0],
-            paymentAll: result[1],
+        let [returnOne, paymentAll] = result
+        res.json({
+            returnOne,
+            paymentAll,
             page: pages,
-            errors: req.flash('errors'),
             permission: req.session.permission,
             name: req.session.account,
             loginsuccess: 0
         })
-
     })
+
 
 }
 module.exports.searchPayment = (req, res) => {
-    let errorArr = [];
     const pages = parseInt(req.query.page) || 1;
     const limit = 6;
     const offset = (pages - 1) * limit;
@@ -36,21 +35,14 @@ module.exports.searchPayment = (req, res) => {
                 status: 400,
                 message: 'Fail to query database'
             });
-        if (result[0].length === 0) {
-            errorArr.push('Not found...');
-            req.flash('errors', errorArr);
-            return res.redirect('/payment');
-        }
-        res.render('manage/paymentInfo/search', {
+        res.json({
             result: result[0],
             search: search,
             page: pages,
             paymentAll: result[1],
-            errors: req.flash('errors'),
-            success: req.flash('success'),
             permission: req.session.permission,
             name: req.session.account,
             loginsuccess: 0
-        });
+        })
     })
 };

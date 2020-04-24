@@ -32,16 +32,16 @@ app.use(express.static('src/public'));
 app.use(express.json({ limit: '1mb' }));
 // session
 configSS(app);
-// app use
+// app use  
 
 app.use('/', homeRoute);
 app.use('/user', userRoute);
 app.use('/product', requireAuth.requireAuth, productRoute);
 app.use('/category', requireAuth.requireAuth, categoryRoute);
-app.use('/brand',/* requireAuth.requireAuth,*/ brandRoute);
+app.use('/brand', requireAuth.requireAuth, brandRoute);
 app.use('/auth', authRoute);
 app.use('/customer', requireAuth.requireAuth, customerRoute);
-app.use('/order', orderRoute);
+app.use('/order', requireAuth.requireAuth, orderRoute);
 app.use('/admin', adminRoute);
 app.use('/payment', requireAuth.requireAuth, paymentRoute);
 

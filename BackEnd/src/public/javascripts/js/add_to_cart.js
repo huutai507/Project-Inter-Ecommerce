@@ -32,7 +32,7 @@ async function sendData() {
     let stripeHandler = StripeCheckout.configure({
         key: stripePublicKey,
         locale: 'en',
-        token: function(token) {
+        token: function (token) {
             const options = {
                 method: 'POST',
                 headers: {
@@ -47,7 +47,9 @@ async function sendData() {
                     tokenMessage: sendTokenToServer
                 })
             }
-            fetch('/order', options)
+            console.log('here')
+            axios.post('http://localhost:4500/order', options)
+            // fetch('http://localhost:4500/order', options)
         }
     })
     stripeHandler.open({

@@ -3,6 +3,7 @@ import connectDB from '../config/connectDB';
 
 // get category // views an Category
 module.exports.getCategory = (req, res) => {
+    res.render('manage/category/index')
     // const pages = parseInt(req.query.page) || 1;
     // const limit = 10;
     // const offset = (pages - 1) * limit;

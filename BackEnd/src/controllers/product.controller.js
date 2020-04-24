@@ -17,55 +17,38 @@ module.exports.getProducts = (req, res) => {
                 message: 'Fail to query database'
             });
         }
-        res.render('manage/product/index', {
+        res.json({
             products: result[0],
             productsAll: result[1],
             page: pages,
-            errors: req.flash('errors'),
-            success: req.flash('success'),
             permission: req.session.permission,
             name: req.session.account,
             loginsuccess: 0
-        });
+        })
     });
 };
 //get insert product
 module.exports.getInsertProduct = (req, res) => {
-    // cloudinary.getData().then(result => result)
-    // Can use promise
     let sql = 'SELECT * FROM tbl_brands; SELECT * FROM tbl_categories ';
     connectDB.query(sql, (err, result) => {
-        res.render('manage/product/createProduct', {
+        res.json({
             brandNames: result[0],
             categoryNames: result[1],
-            errors: req.flash('errors'),
             permission: req.session.permission,
             name: req.session.account,
             loginsuccess: 0
-        });
+        })
     });
 };
 // Insert a product
 
 module.exports.insertProduct = async (req, res) => {
-    let errorArr = [];
-    let successArr = [];
-    let upload = await cloudinary.uploadSingle(req.file.path);
-    const validationErros = await validationResult(req);
-    if (!validationErros.isEmpty()) {
-        const errors = Object.values(validationErros.mapped());
-        errors.forEach(item => {
-            errorArr.push(item.msg);
-        });
-        req.flash('errors', errorArr);
-        res.redirect('/product/insert');
-        return;
-    }
-    const emp = req.body;
+    let upload = req.body.upload.url;
+    const emp = req.body.data;
     const values = [
         emp.productName,
         emp.color,
-        upload.url,
+        upload,
         emp.description,
         emp.price,
         emp.promotion,
@@ -80,9 +63,7 @@ module.exports.insertProduct = async (req, res) => {
             if (err) {
                 console.log(err)
             }
-            successArr.push(`Add "${emp.productName}" successful`);
-            req.flash('success', successArr);
-            res.redirect('/product');
+            res.json({ insertSuccess: true })
         }
     );
 }
@@ -90,20 +71,20 @@ module.exports.insertProduct = async (req, res) => {
 // get update
 module.exports.getUpdateProduct = (req, res) => {
     let id = req.params.id;
+    console.log(id)
     let sql =
         'SELECT * FROM tbl_brands; SELECT * FROM tbl_categories; SELECT tbl_products.id, tbl_products.productName, tbl_products.color, tbl_products.image, tbl_products.description, tbl_products.price, tbl_products.promotion, tbl_products.country,tbl_products.brandId, tbl_products.categoryId, tbl_brands.brandName, tbl_categories.categoryName FROM tbl_products INNER JOIN tbl_brands ON tbl_products.brandId = tbl_brands.id INNER JOIN tbl_categories ON tbl_products.categoryId = tbl_categories.id';
     connectDB.query(sql, (err, result) => {
         for (let i = 0; i < result[2].length; i++) {
             if (result[2][i].id == id) {
-                res.render('manage/product/productInformation', {
+                res.json({
                     item: result[2][i], // results product
                     brandNames: result[0], // results brand
                     categoryNames: result[1], // results category
-                    errors: req.flash('errors'),
                     permission: req.session.permission,
                     name: req.session.account,
                     loginsuccess: 0
-                });
+                })
             }
         }
     });
@@ -112,26 +93,14 @@ module.exports.getUpdateProduct = (req, res) => {
 // update a product
 
 module.exports.updateProduct = async (req, res) => {
-    let upload = await cloudinary.uploadSingle(req.file.path);
-    let errorArr = [];
-    let successArr = [];
-    const validationErros = validationResult(req);
-    if (!validationErros.isEmpty()) {
-        const errors = Object.values(validationErros.mapped());
-        errors.forEach(item => {
-            errorArr.push(item.msg);
-        });
-        req.flash('errors', errorArr);
-        res.redirect('/product/insert');
-        return;
-    }
-
-    const emp = req.body;
+    const emp = req.body.data;
+    const upload = req.body.upload.url
+    console.log('This is upload', upload)
     connectDB.query(
         'UPDATE `tbl_products` SET `productName`=?,`color`=?,`image`=?,`description`=?,`price`=?,`promotion`=?,`country`=?,`brandId`=?,`categoryId`=? WHERE id = ?', [
         emp.productName,
         emp.color,
-        upload.url,
+        upload,
         emp.description,
         emp.price,
         emp.promotion,
@@ -147,9 +116,8 @@ module.exports.updateProduct = async (req, res) => {
                     message: 'Fail to query database'
                 });
             }
-            successArr.push(`Update successful`);
-            req.flash('success', successArr);
-            res.redirect('/product');
+            res.json({ updateSuccess: true })
+            return;
         }
     );
 
@@ -157,25 +125,22 @@ module.exports.updateProduct = async (req, res) => {
 // delete a product
 module.exports.deleteProduct = (req, res) => {
     let id = req.params.id;
-    let errorArr = [];
-    let successArr = [];
+
     connectDB.query(
         'SELECT `productName` FROM `tbl_products` WHERE id = ? ; DELETE FROM `tbl_products` WHERE id = ?', [id, id],
         (err, result) => {
+
             if (err) {
-                errorArr.push(`Cannot be deleted product "${result[0][0].productName}"`);
-                req.flash('errors', errorArr);
-                return res.redirect('/product');
+                res.json({ deleteError: true, nameProduct: result[0][0].productName })
+                return;
             }
-            successArr.push(`Delete "${result[0][0].productName}" successful`);
-            req.flash('success', successArr);
-            res.redirect('/product');
+            res.json({ deleteProduct: true, nameProduct: result[0][0].productName })
+            return;
         }
     );
 };
 // search Product manager
 module.exports.searchProduct = (req, res) => {
-    let errorArr = [];
     const pages = parseInt(req.query.page) || 1;
     const limit = 4;
     const offset = (pages - 1) * limit;
@@ -188,22 +153,17 @@ module.exports.searchProduct = (req, res) => {
                 status: 400,
                 message: 'Fail to query database'
             });
-        if (result[0].length === 0) {
-            errorArr.push('Products not found...');
-            req.flash('errors', errorArr);
-            return res.redirect('../product');
-        } else {
-            res.render('manage/product/search', {
-                products: result[0],
-                search: search,
-                page: pages,
-                productsAll: result[1],
-                errors: req.flash('errors'),
-                success: req.flash('success'),
-                permission: req.session.permission,
-                name: req.session.account,
-                loginsuccess: 0
-            });
-        }
+
+        res.json({
+            products: result[0],
+            search: search,
+            page: pages,
+            productsAll: result[1],
+            errors: req.flash('errors'),
+            success: req.flash('success'),
+            permission: req.session.permission,
+            name: req.session.account,
+            loginsuccess: 0
+        })
     });
 };

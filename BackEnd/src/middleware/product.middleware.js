@@ -2,7 +2,8 @@ import connectDB from '../config/connectDB';
 
 // CHECK product name already exists INSERT
 module.exports.productNameInsert = (req, res, next) => {
-  const temp = req.body;
+  const temp = req.body.data;
+  console.log('This is temp', temp)
   const productName = temp.productName;
   const brandId = temp.brandId;
   const categoryId = temp.categoryId;
@@ -19,10 +20,8 @@ module.exports.productNameInsert = (req, res, next) => {
         });
       }
       if (rows.length) {
-        let errorArr = [];
-        errorArr.push('The product already exists !!!');
-        req.flash('errors', errorArr);
-        return res.redirect('/product/insert');
+        res.json({ productExist: true })
+        return;
       }
       next();
     }
@@ -31,7 +30,7 @@ module.exports.productNameInsert = (req, res, next) => {
 
 // CHECK product name already exists UPDATE
 module.exports.productNameUpdate = (req, res, next) => {
-  const temp = req.body;
+  const temp = req.body.data;
   const productName = temp.productName;
   const brandId = temp.brandId;
   const categoryId = temp.categoryId;
@@ -52,10 +51,8 @@ module.exports.productNameUpdate = (req, res, next) => {
         });
       }
       if (rows.length) {
-        let errorArr = [];
-        errorArr.push('The product already exists !!!');
-        req.flash('errors', errorArr);
-        return res.redirect('/product/update/' + id);
+        res.json({ productExist: true });
+        return;
       }
       next();
     }
