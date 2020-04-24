@@ -1,5 +1,4 @@
 import { validationResult } from 'express-validator/check';
-import connectDB from '../config/connectDB';
 import axios from 'axios'
 import { response } from 'express';
 
@@ -12,16 +11,16 @@ module.exports.getBrand = (req, res) => {
     let pages = req.query.page;
     axios.get('http://localhost:4500/brand?page=' + pages)
         .then((response) => {
-            let { brands, brandsAll, page, permission, loginsuccess, name } = response.data;
+            let { brands, brandsAll, page, loginsuccess } = response.data;
             res.render('manage/brand/index', {
                 brands,
                 brandsAll,
                 page,
                 errors: req.flash('errors'),
                 success: req.flash('success'),
-                permission,
+                permission: req.session.permission,
                 loginsuccess,
-                name
+                name: req.session.account
             })
         }).catch((error) => {
             res.render('manage/brand/index');
@@ -32,12 +31,12 @@ module.exports.getBrand = (req, res) => {
 module.exports.getCreateBrand = (req, res) => {
     axios.get('http://localhost:4500/brand/insert')
         .then((response) => {
-            let { permission, name, loginsuccess } = response.data
+            let { loginsuccess } = response.data
             res.render('manage/brand/createBrand', {
                 errors: req.flash('errors'),
                 success: req.flash('success'),
-                permission,
-                name,
+                permission: req.session.permission,
+                name: req.session.account,
                 loginsuccess
             })
         }).catch((error) => {
@@ -75,16 +74,15 @@ module.exports.insertBrand = (req, res) => {
 // Get update
 module.exports.getUpdateBrand = (req, res) => {
     let id = req.params.id;
-    // let sql = 'SELECT * FROM tbl_brands WHERE id = ?';
     axios.get('http://localhost:4500/brand/update/' + id)
         .then((response) => {
-            let { brand, permission, name, loginsuccess } = response.data;
+            let { brand, loginsuccess } = response.data;
             res.render('manage/brand/informationBrand', {
                 brand,
                 errors: req.flash('errors'),
                 success: req.flash('success'),
-                permission,
-                name,
+                permission: req.session.permission,
+                name: req.session.account,
                 loginsuccess
             })
         }).catch((error) => {
@@ -151,14 +149,14 @@ module.exports.searchBrand = (req, res) => {
                 req.flash('errors', errorArr);
                 return res.redirect('/brand')
             }
-            let { brands, search, page, brandsAll, permission, name, loginsuccess } = response.data;
+            let { brands, search, page, brandsAll, loginsuccess } = response.data;
             return res.render('manage/brand/search', {
                 brands,
                 search,
                 page,
                 brandsAll,
-                permission,
-                name,
+                permission: req.session.permission,
+                name: req.session.account,
                 errors: req.flash('errors'),
                 loginsuccess
             })

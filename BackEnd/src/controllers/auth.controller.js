@@ -65,7 +65,6 @@ module.exports.register = (req, res) => {
 // register user Post
 module.exports.createRegister = (req, res) => {
     const emp = req.body;
-    // const permission = 'NHANVIEN';
     const hashPassword = sha1(emp.password);
     const values = [
         emp.userName,

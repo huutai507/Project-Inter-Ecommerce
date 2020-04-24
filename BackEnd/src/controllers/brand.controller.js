@@ -1,6 +1,6 @@
 import { validationResult } from 'express-validator/check';
 import connectDB from '../config/connectDB';
-import per from '../controllers/auth.controller'
+
 let FCM = require('fcm-node');
 let serverKey = 'AAAALvxje6Q:APA91bEflP9zXkHTBit9aQUOvyay-1CmNvIuRaIJ7gwTt_uAQNcZZN8fSU0fwi7CNdfoZXSa4_THvnQo6tQuHjAOiHMcfvNkxOfc-2WjDsNRa0vP32aOx1Hx-xC6FyAL_fZ7nA8M4t5k'; //put your server key here
 let fcm = new FCM(serverKey);
@@ -8,7 +8,6 @@ let fcm = new FCM(serverKey);
 
 //get brand
 module.exports.getBrand = (req, res) => {
-    // eslint-disable-next-line radix
     const pages = parseInt(req.query.page) || 1;
     const limit = 10;
     const offset = (pages - 1) * limit;
@@ -21,36 +20,19 @@ module.exports.getBrand = (req, res) => {
             });
         }
         let [brands, brandsAll] = [result[0], result[1]];
-        // FIX lai cho nay
-        res.json({ brands, brandsAll, page: pages, permission: 'MANAGE', loginsuccess: 0, name: 'nguyenhongthai' })
-        // res.render('manage/brand/index', {
-        //     brands: result[0],
-        //     brandsAll: result[1],
-        //     page: pages,
-        //     errors: req.flash('errors'),
-        //     success: req.flash('success'),
-        //     permission: req.session.permission,
-        //     name: req.session.account,
-        //     loginsuccess: 0
-        // });
+        res.json({ brands, brandsAll, page: pages, loginsuccess: 0 })
     });
 }
 
 // get insert
 module.exports.getCreateBrand = (req, res) => {
-    res.json({ permission: 'MANAGE', name: 'nguyenhongthai', loginsuccess: 0 });
-    // res.render('manage/brand/createBrand', {
-    //     errors: req.flash('errors'),
-    //     permission: req.session.permission,
-    //     name: req.session.account,
-    //     loginsuccess: 0
-    // });
+    res.json({ loginsuccess: 0 });
+
 };
 // insert a Brand
 module.exports.insertBrand = (req, res) => {
     const values = req.body;
     let successArr = [];
-
     // query
     connectDB.query(
         'INSERT INTO `tbl_brands`(`brandName`) VALUES (?)', [values],
@@ -76,21 +58,13 @@ module.exports.getUpdateBrand = (req, res) => {
                 message: 'Fail to query database'
             });
         }
-        res.json({ brand: result, permission: 'MANAGE', name: 'nguyenhongthai', loginsuccess: 0 })
-        // res.render('manage/brand/informationBrand', {
-        //     brand: result,
-        //     errors: req.flash('errors'),
-        //     permission: req.session.permission,
-        //     name: req.session.account,
-        //     loginsuccess: 0
-        // });
+        res.json({ brand: result, loginsuccess: 0 })
     });
 }
 // update a Brand
 module.exports.updateBrand = (req, res) => {
     const brandName = req.body;
     let id = req.params.id;
-    console.log(brandName + ' control ' + id)
     let successArr = [];
     connectDB.query(
         'UPDATE `tbl_brands` SET `brandName`= ? WHERE id = ?', [brandName, id],
@@ -151,8 +125,6 @@ module.exports.searchBrand = (req, res) => {
             search: search,
             page: pages,
             brandsAll: result[1],
-            permission: 'MANAGE',
-            name: 'nguyenhongthai',
             loginsuccess: 0
         });
     })
