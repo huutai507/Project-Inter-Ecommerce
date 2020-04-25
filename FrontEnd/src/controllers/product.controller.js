@@ -114,7 +114,6 @@ module.exports.updateProduct = async (req, res) => {
     let upload = await cloudinary.uploadSingle(req.file.path);
     axios.post('http://localhost:4500/product/update/' + id, { data, upload })
         .then((response) => {
-            console.log(response.data)
             let { updateSuccess, productExist } = response.data
             if (updateSuccess) {
                 successArr.push(`Add "${data.productName}" successful`);

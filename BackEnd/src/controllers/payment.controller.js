@@ -17,8 +17,6 @@ module.exports.getPayment = (req, res) => {
             loginsuccess: 0
         })
     })
-
-
 }
 module.exports.searchPayment = (req, res) => {
     const pages = parseInt(req.query.page) || 1;
