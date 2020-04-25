@@ -43,10 +43,10 @@ module.exports.confirmOrder = (req, res) => {
 }
 //  search new ORDER
 module.exports.searchOrder = (req, res) => {
+    let errorArr = [];
     const search = req.query.key;
     const page = req.query.page;
-    let errorArr = [];
-    axios.get('http://localhost:45500/order/search?key=' + search + '&page=' + page)
+    axios.get('http://localhost:4500/order/search?key=' + search + '&page=' + page)
         .then((response) => {
             let { order, search, page, orderAll, permission, name, loginsuccess } = response.data
             if (order.length === 0) {
@@ -58,14 +58,15 @@ module.exports.searchOrder = (req, res) => {
                 order,
                 search,
                 page,
-                errors: req.flash('errors'),
-                success: req.flash('success'),
                 orderAll,
                 permission,
                 name,
-                loginsuccess
+                loginsuccess,
+                errors: req.flash('errors'),
+                success: req.flash('success')
             })
         }).catch((err) => {
+            console.log(err)
             res.redirect('/order')
         })
 };
@@ -94,7 +95,7 @@ module.exports.searchOrderConfirmed = (req, res) => {
     let errorArr = [];
     const page = req.query.page;
     const search = req.query.key;
-    axios.get('http://localhost:4500/order/search-orderconfirm?key=' + search + '&page' + page)
+    axios.get('http://localhost:4500/order/search-orderconfirm?key=' + search + '&page=' + page)
         .then((response) => {
             let { order, search, page, orderAll, permission, name, loginsuccess } = response.data;
             if (order.length === 0) {

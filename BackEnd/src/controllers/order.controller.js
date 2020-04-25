@@ -331,9 +331,7 @@ module.exports.searchOrder = (req, res) => {
             orderAll,
             permission: req.session.permission,
             name: req.session.account,
-            loginsuccess: 0,
-            orderDetail
-
+            loginsuccess: 0
         })
     })
 };
@@ -366,7 +364,6 @@ module.exports.viewOrderConfirmed = (req, res) => {
 }
 //  search  ORDER confirm 
 module.exports.searchOrderConfirmed = (req, res) => {
-    let errorArr = [];
     const pages = parseInt(req.query.page) || 1;
     const limit = 4;
     const offset = (pages - 1) * limit;
@@ -386,11 +383,6 @@ module.exports.searchOrderConfirmed = (req, res) => {
                 status: 400,
                 message: 'Fail to query database'
             });
-        if (result[1].length === 0) {
-            errorArr.push('No order found...');
-            req.flash('errors', errorArr);
-            return res.redirect('/order/order-confirmed');
-        }
         res.json({
             order,
             search,
@@ -401,6 +393,5 @@ module.exports.searchOrderConfirmed = (req, res) => {
             loginsuccess: 0,
 
         })
-
     })
 };

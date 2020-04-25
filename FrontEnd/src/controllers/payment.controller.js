@@ -2,7 +2,7 @@ import connectDB from '../config/connectDB';
 import axios from 'axios';
 module.exports.getPayment = (req, res) => {
     const page = req.query.page
-    axios.get('http://localhost:4500/payment?page' + page)
+    axios.get('http://localhost:4500/payment?page=' + page)
         .then((response) => {
             let { returnOne, paymentAll, page, permission, name, loginsuccess } = response.data
             res.render('manage/paymentInfo/index', {
