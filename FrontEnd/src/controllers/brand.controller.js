@@ -23,7 +23,7 @@ module.exports.getBrand = (req, res) => {
                 name: req.session.account
             })
         }).catch((error) => {
-            res.render('manage/brand/index');
+            res.redirect('/brand');
         })
 }
 
@@ -40,7 +40,7 @@ module.exports.getCreateBrand = (req, res) => {
                 loginsuccess
             })
         }).catch((error) => {
-            res.render('manage/brand/createBrand');
+            res.redirect('/brand');
         })
 };
 // insert a Brand

@@ -18,7 +18,7 @@ module.exports.getCategory = (req, res) => {
                 name: req.session.account
             })
         }).catch((error) => {
-            res.render('manage/brand/index');
+            res.redirect('/category');
         })
 };
 
@@ -35,7 +35,7 @@ module.exports.getInsertCategory = (req, res) => {
                 loginsuccess
             })
         }).catch((error) => {
-            res.render('manage/category/createCategory');
+            res.redirect('/category');
         })
 };
 // insert a Category
