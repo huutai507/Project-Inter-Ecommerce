@@ -21,8 +21,6 @@ module.exports.getProducts = (req, res) => {
             products: result[0],
             productsAll: result[1],
             page: pages,
-            permission: req.session.permission,
-            name: req.session.account,
             loginsuccess: 0
         })
     });
@@ -34,8 +32,6 @@ module.exports.getInsertProduct = (req, res) => {
         res.json({
             brandNames: result[0],
             categoryNames: result[1],
-            permission: req.session.permission,
-            name: req.session.account,
             loginsuccess: 0
         })
     });
@@ -71,7 +67,6 @@ module.exports.insertProduct = async (req, res) => {
 // get update
 module.exports.getUpdateProduct = (req, res) => {
     let id = req.params.id;
-    console.log(id)
     let sql =
         'SELECT * FROM tbl_brands; SELECT * FROM tbl_categories; SELECT tbl_products.id, tbl_products.productName, tbl_products.color, tbl_products.image, tbl_products.description, tbl_products.price, tbl_products.promotion, tbl_products.country,tbl_products.brandId, tbl_products.categoryId, tbl_brands.brandName, tbl_categories.categoryName FROM tbl_products INNER JOIN tbl_brands ON tbl_products.brandId = tbl_brands.id INNER JOIN tbl_categories ON tbl_products.categoryId = tbl_categories.id';
     connectDB.query(sql, (err, result) => {
@@ -80,9 +75,7 @@ module.exports.getUpdateProduct = (req, res) => {
                 res.json({
                     item: result[2][i], // results product
                     brandNames: result[0], // results brand
-                    categoryNames: result[1], // results category
-                    permission: req.session.permission,
-                    name: req.session.account,
+                    categoryNames: result[1], // results category2
                     loginsuccess: 0
                 })
             }
@@ -95,7 +88,6 @@ module.exports.getUpdateProduct = (req, res) => {
 module.exports.updateProduct = async (req, res) => {
     const emp = req.body.data;
     const upload = req.body.upload.url
-    console.log('This is upload', upload)
     connectDB.query(
         'UPDATE `tbl_products` SET `productName`=?,`color`=?,`image`=?,`description`=?,`price`=?,`promotion`=?,`country`=?,`brandId`=?,`categoryId`=? WHERE id = ?', [
         emp.productName,
@@ -161,8 +153,6 @@ module.exports.searchProduct = (req, res) => {
             productsAll: result[1],
             errors: req.flash('errors'),
             success: req.flash('success'),
-            permission: req.session.permission,
-            name: req.session.account,
             loginsuccess: 0
         })
     });

@@ -74,10 +74,10 @@ module.exports.loginPost = (req, res) => {
 module.exports.register = (req, res) => {
     axios.get('http://localhost:4500/auth/register')
         .then((response) => {
-            let { permission, name, loginsuccess } = response.data
+            let { loginsuccess } = response.data
             res.render('auth/register', {
-                permission,
-                name,
+                permission: req.session.permission,
+                name: req.session.account,
                 loginsuccess,
                 errors: req.flash('errors')
             })

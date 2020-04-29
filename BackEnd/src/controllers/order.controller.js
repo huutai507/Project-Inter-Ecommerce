@@ -289,8 +289,6 @@ module.exports.viewOrder = (req, res) => {
             page: pages,
             orderAll,
             loginsuccess: 0,
-            permission: req.session.permission,
-            name: req.session.account
         })
     })
 }

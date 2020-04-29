@@ -3,7 +3,6 @@ import connectDB from '../config/connectDB';
 // CHECK product name already exists INSERT
 module.exports.productNameInsert = (req, res, next) => {
   const temp = req.body.data;
-  console.log('This is temp', temp)
   const productName = temp.productName;
   const brandId = temp.brandId;
   const categoryId = temp.categoryId;

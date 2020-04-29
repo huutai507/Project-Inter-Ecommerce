@@ -78,7 +78,10 @@
                                         <%= item.color %>
                                     </td>
                                     <td>
-                                        <%= item.description %>
+                                        <% item.description = item.description.replace(/(<([^>]+)>)/ig, "");%>
+                                        <textarea name="description" id="editor" cols="30" rows="10">
+                                             <%= item.description %>
+                                        </textarea>
                                     </td>
                                     <td>
                                         <%= item.price %>
