@@ -8,13 +8,13 @@ module.exports.getProducts = (req, res) => {
     const page = req.query.page
     axios.get('http://localhost:4500/product?page=' + page)
         .then((response) => {
-            let { products, productsAll, page, permission, name, loginsuccess } = response.data
+            let { products, productsAll, page, loginsuccess } = response.data
             res.render('manage/product/index', {
                 products,
                 productsAll,
                 page,
-                permission,
-                name,
+                permission: req.session.permission,
+                name: req.session.account,
                 loginsuccess,
                 errors: req.flash('errors'),
                 success: req.flash('success')
@@ -25,12 +25,12 @@ module.exports.getProducts = (req, res) => {
 module.exports.getInsertProduct = (req, res) => {
     axios.get('http://localhost:4500/product/insert')
         .then((response) => {
-            let { brandNames, categoryNames, permission, name, loginsuccess } = response.data
+            let { brandNames, categoryNames, loginsuccess } = response.data
             res.render('manage/product/createProduct', {
                 brandNames,
                 categoryNames,
-                permission,
-                name,
+                permission: req.session.permission,
+                name: req.session.account,
                 loginsuccess,
                 errors: req.flash('errors'),
             })
@@ -50,13 +50,11 @@ module.exports.insertProduct = async (req, res) => {
             errorArr.push(item.msg);
         });
         req.flash('errors', errorArr);
-        res.redirect('/product/insert');
-        return;
+        return res.redirect('/product/insert');
     }
     let upload = await cloudinary.uploadSingle(req.file.path);
     axios.post('http://localhost:4500/product/insert', { data, upload })
         .then((response) => {
-            console.log(response.data)
             let { insertSuccess, productExist } = response.data
             if (insertSuccess) {
                 successArr.push(`Add "${data.productName}" successful`);
@@ -84,8 +82,8 @@ module.exports.getUpdateProduct = (req, res) => {
                 item,
                 brandNames,
                 categoryNames,
-                permission,
-                name,
+                permission: req.session.permission,
+                name: req.session.account,
                 loginsuccess,
                 errors: req.flash('errors')
             });
@@ -108,8 +106,7 @@ module.exports.updateProduct = async (req, res) => {
             errorArr.push(item.msg);
         });
         req.flash('errors', errorArr);
-        res.redirect('/product/insert');
-        return;
+        return res.redirect('/product/insert');
     }
     let upload = await cloudinary.uploadSingle(req.file.path);
     axios.post('http://localhost:4500/product/update/' + id, { data, upload })
@@ -118,7 +115,7 @@ module.exports.updateProduct = async (req, res) => {
             if (updateSuccess) {
                 successArr.push(`Add "${data.productName}" successful`);
                 req.flash('success', successArr);
-                return res.redirect('/product/update/' + id);
+                return res.redirect('/product');
             }
             if (productExist) {
                 errorArr.push('The product already exists !!!');
@@ -168,8 +165,8 @@ module.exports.searchProduct = (req, res) => {
                 search,
                 page,
                 productsAll,
-                permission,
-                name,
+                permission: req.session.permission,
+                name: req.session.account,
                 loginsuccess,
                 errors: req.flash('errors'),
                 success: req.flash('success')

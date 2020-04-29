@@ -12,8 +12,6 @@ module.exports.getPayment = (req, res) => {
             returnOne,
             paymentAll,
             page: pages,
-            permission: req.session.permission,
-            name: req.session.account,
             loginsuccess: 0
         })
     })
@@ -38,8 +36,6 @@ module.exports.searchPayment = (req, res) => {
             search: search,
             page: pages,
             paymentAll: result[1],
-            permission: req.session.permission,
-            name: req.session.account,
             loginsuccess: 0
         })
     })

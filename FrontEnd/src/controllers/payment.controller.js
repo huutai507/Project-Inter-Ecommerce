@@ -1,16 +1,16 @@
-import connectDB from '../config/connectDB';
 import axios from 'axios';
+
 module.exports.getPayment = (req, res) => {
     const page = req.query.page
     axios.get('http://localhost:4500/payment?page=' + page)
         .then((response) => {
-            let { returnOne, paymentAll, page, permission, name, loginsuccess } = response.data
+            let { returnOne, paymentAll, page, loginsuccess } = response.data
             res.render('manage/paymentInfo/index', {
                 result: returnOne,
                 paymentAll,
                 page,
-                permission,
-                name,
+                permission: req.session.permission,
+                name: req.session.account,
                 loginsuccess,
                 errors: req.flash('errors'),
 
@@ -25,7 +25,7 @@ module.exports.searchPayment = (req, res) => {
     const search = req.query.key;
     axios.get('http://localhost:4500/payment/search?key=' + search + '&page=' + page)
         .then((response) => {
-            let { result, search, page, paymentAll, permission, name, loginsuccess } = response.data
+            let { result, search, page, paymentAll, loginsuccess } = response.data
             if (result.length === 0) {
                 errorArr.push('Not found...');
                 req.flash('errors', errorArr);
@@ -36,8 +36,8 @@ module.exports.searchPayment = (req, res) => {
                 search,
                 page,
                 paymentAll,
-                permission,
-                name,
+                permission: req.session.permission,
+                name: req.session.account,
                 loginsuccess,
                 errors: req.flash('errors'),
                 success: req.flash('success')

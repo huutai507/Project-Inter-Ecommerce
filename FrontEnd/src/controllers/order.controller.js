@@ -8,14 +8,14 @@ module.exports.viewOrder = (req, res) => {
     let page = req.query.page
     axios.get('http://localhost:4500/order?page=' + page)
         .then((response) => {
-            let { order, page, orderAll, loginsuccess, permission, name } = response.data
+            let { order, page, orderAll, loginsuccess } = response.data
             res.render('manage/order/index', {
                 order,
                 page,
                 orderAll,
                 loginsuccess,
-                permission,
-                name,
+                permission: req.session.permission,
+                name: req.session.account,
                 errors: req.flash('errors'),
                 success: req.flash('success')
             })
@@ -48,7 +48,7 @@ module.exports.searchOrder = (req, res) => {
     const page = req.query.page;
     axios.get('http://localhost:4500/order/search?key=' + search + '&page=' + page)
         .then((response) => {
-            let { order, search, page, orderAll, permission, name, loginsuccess } = response.data
+            let { order, search, page, orderAll, loginsuccess } = response.data
             if (order.length === 0) {
                 errorArr.push('No order found...');
                 req.flash('errors', errorArr);
@@ -59,8 +59,8 @@ module.exports.searchOrder = (req, res) => {
                 search,
                 page,
                 orderAll,
-                permission,
-                name,
+                permission: req.session.permission,
+                name: req.session.account,
                 loginsuccess,
                 errors: req.flash('errors'),
                 success: req.flash('success')
@@ -75,14 +75,14 @@ module.exports.viewOrderConfirmed = (req, res) => {
     const page = req.query.page;
     axios.get('http://localhost:4500/order/order-confirmed?page=' + page)
         .then((response) => {
-            let { order, page, orderAll, loginsuccess, permission, name } = response.data
+            let { order, page, orderAll, loginsuccess } = response.data
             res.render('manage/order/orderConfirmed', {
                 order,
                 page,
                 orderAll,
                 loginsuccess,
-                permission,
-                name,
+                permission: req.session.permission,
+                name: req.session.account,
                 errors: req.flash('errors'),
                 success: req.flash('success')
             })
@@ -108,8 +108,8 @@ module.exports.searchOrderConfirmed = (req, res) => {
                 search,
                 page,
                 orderAll,
-                permission,
-                name,
+                permission: req.session.permission,
+                name: req.session.account,
                 loginsuccess,
                 errors: req.flash('errors'),
                 success: req.flash('success')
