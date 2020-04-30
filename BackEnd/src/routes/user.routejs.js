@@ -5,23 +5,21 @@ import isManage from '../middleware/user.middleware';
 
 const router = express.Router();
 // get all User
-router.get('/', isManage.requireManage, controller.viewUser);
-// get 1 user
-router.get('/views/:id', isManage.requireManage, controller.getID);
+router.get('/', controller.viewUser);
 // update user
-router.get('/update/:id', isManage.requireManage, controller.getUpdateUser);
-router.post('/update/:id', validate.updateUser, controller.updateUser);
+router.get('/update/:id', controller.getUpdateUser);
+router.post('/update/:id', controller.updateUser);
 // set Password defautl
-router.get('/set-password/:id', controller.setDefaulPassword);
+router.post('/set-password/:id', controller.setDefaulPassword);
 // update 
 router.get('/change-password', controller.getChangePassword)
-router.post('/change-password', validate.changePassword, controller.changePassword);
+router.post('/change-password', controller.changePassword);
 // update information for user
-router.get('/update-info', controller.getUpdateInfor);
-router.post('/update-info/:id', validate.updateInfoUser, controller.updateInfoUser);
+router.get('/update-info/:id', controller.getUpdateInfor);
+router.post('/update-info/:id', controller.updateInfoUser);
 // delete user : id
-router.get('/delete/:id', isManage.requireManage, controller.deleteUser);
+router.get('/delete/:id', controller.deleteUser);
 // search user 
-router.get('/search', isManage.requireManage, controller.searchUser);
+router.get('/search', controller.searchUser);
 
 module.exports = router;

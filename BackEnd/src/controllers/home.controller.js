@@ -111,7 +111,6 @@ module.exports.filterBrand = (req, res) => {
 // search
 module.exports.search = (req, res) => {
     const search = req.query.key;
-    console.log(search)
     const nameTable = ['tbl_products'];
     const name = [`tbl_products.productName LIKE '%${search}%' ORDER BY price DESC; SELECT * FROM tbl_categories; SELECT * FROM tbl_brands`];
     connectDB.query(
