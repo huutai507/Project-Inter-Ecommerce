@@ -6,13 +6,11 @@ import isManage from '../middleware/user.middleware';
 const router = express.Router();
 // get all User
 router.get('/', isManage.requireManage, controller.viewUser);
-// get 1 user
-router.get('/views/:id', isManage.requireManage, controller.getID);
 // update user
 router.get('/update/:id', isManage.requireManage, controller.getUpdateUser);
 router.post('/update/:id', validate.updateUser, controller.updateUser);
 // set Password defautl
-router.get('/set-password/:id', controller.setDefaulPassword);
+router.get('/set-password/:id', isManage.requireManage, controller.setDefaulPassword);
 // update 
 router.get('/change-password', controller.getChangePassword)
 router.post('/change-password', validate.changePassword, controller.changePassword);

@@ -43,38 +43,38 @@
                                         <% });%>
                                         <% } %>
                                         <h5 class="card-title text-center">Update User</h5>
-                                        <form class="form-signin" action="/user/update/<%= inforUser.id%>"
+                                        <form class="form-signin" action="/user/update/<%= inforUser[0].id%>"
                                             method="POST">
                                             <div class="form-label-group">
                                                 <div>ID</div>
                                                 <input type="text" id="inputName" class="form-control"
-                                                    value="<%= inforUser.id %>" name="id" disabled>
+                                                    value="<%= inforUser[0].id %>" name="id" disabled>
                                             </div>
                                             <div class="form-label-group">
                                                 <div>Name</div>
                                                 <input type="text" id="inputName" class="form-control"
-                                                    value="<%= inforUser.userName %>" name="userName" required
+                                                    value="<%= inforUser[0].userName %>" name="userName" required
                                                     autofocus>
                                             </div>
                                             <div class="form-label-group">
                                                 <div>Phone number</div>
                                                 <input type="text" id="inputPhoneNumber" class="form-control"
-                                                    value="<%= inforUser.phone %>" name="phone" required autofocus>
+                                                    value="<%= inforUser[0].phone %>" name="phone" required autofocus>
                                             </div>
                                             <div class="form-label-group">
                                                 <div>Email address</div>
                                                 <input type="email" id="inputEmail" class="form-control"
-                                                    value="<%= inforUser.email %>" name="email" required autofocus>
+                                                    value="<%= inforUser[0].email %>" name="email" required autofocus>
                                             </div>
                                             <div class="form-label-group">
                                                 <div>Account</div>
                                                 <input type="text" id="inputUsername" class="form-control"
-                                                    value="<%= inforUser.account %>" name="account" disabled>
+                                                    value="<%= inforUser[0].account %>" name="account" disabled>
                                             </div>
                                             <div>Permission</div>
                                             <select class="custom-select" id="inputGroupSelect01" name="permission">
-                                                <option selected value="<%= inforUser.permission%>">
-                                                    <%= inforUser.permission%></option>
+                                                <option selected value="<%= inforUser[0].permission%>">
+                                                    <%= inforUser[0].permission%></option>
                                                 <option value="STAFF">STAFF</option>
                                                 <option value="MANAGE">MANAGE</option>
                                             </select>
