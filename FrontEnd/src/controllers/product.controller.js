@@ -154,7 +154,7 @@ module.exports.searchProduct = (req, res) => {
     const search = req.query.key;
     axios.get('http://localhost:4500/product/search?key=' + search + '&page=' + page)
         .then((response) => {
-            let { products, search, page, productsAll, permission, name, loginsuccess } = response.data
+            let { products, search, page, productsAll, loginsuccess } = response.data
             if (products.length === 0) {
                 errorArr.push('Products not found...');
                 req.flash('errors', errorArr);
