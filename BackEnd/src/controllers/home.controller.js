@@ -112,7 +112,7 @@ module.exports.filterBrand = (req, res) => {
 module.exports.search = (req, res) => {
     const search = req.query.key;
     const nameTable = ['tbl_products'];
-    const name = [`tbl_products.productName LIKE '%${search}%' ORDER BY price DESC; SELECT * FROM tbl_categories; SELECT * FROM tbl_brands`];
+    const name = [`productName LIKE '%${search}%' OR color LIKE '%${search}%' OR description LIKE '%${search}%' OR price LIKE '%${search}%' ORDER BY price DESC; SELECT * FROM tbl_categories; SELECT * FROM tbl_brands`];
     connectDB.query(
         `SELECT DISTINCT * FROM ${nameTable} WHERE ${name}`,
         (err, result) => {

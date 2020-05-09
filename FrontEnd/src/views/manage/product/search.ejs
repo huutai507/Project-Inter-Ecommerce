@@ -141,26 +141,30 @@
                             </li>
                             <%} else {%>
                             <li class="page-item">
-                                <a class="page-link" href="../product/?page=<%=page-1 %>" aria-label="Previous">
+                                <a class="page-link" href="../product/search?key=<%=search%>&page=<%=page-1%>"
+                                    aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                     <span class="sr-only">Previous</span>
                                 </a>
                             </li>
                             <%}%>
                                 <% for(let i = 0; i < productsAll.length/4; i++) {%>
-                            <li class="page-item"><a class="page-link" href="../product/?page=<%=i+1 %>"><%= i+1 %></a>
+                            <li class="page-item"><a class="page-link"
+                                    href="../product/search?key=<%=search%>&page=<%=i+1 %>"><%= i+1 %></a>
                             </li>
                             <% }; %>
                             <%if(page >= productsAll.length/4 || page == 0) {%>
                             <li class="page-item disabled">
-                                <a class="page-link" href="../product/?page=<%=page+1 %>" aria-label="Next">
+                                <a class="page-link" href="../product/search?key=<%=search%>&page=<%=page+1 %>"
+                                    aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                     <span class="sr-only">Next</span>
                                 </a>
                             </li>
                             <%} else{%>
                             <li class="page-item">
-                                <a class="page-link" href="../product/?page=<%=page+1 %>" aria-label="Next">
+                                <a class="page-link" href="../product/search?key=<%=search%>&page=<%=page+1 %>"
+                                    aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                     <span class="sr-only">Next</span>
                                 </a>
