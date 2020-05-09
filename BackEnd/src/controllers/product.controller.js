@@ -138,7 +138,7 @@ module.exports.searchProduct = (req, res) => {
     const offset = (pages - 1) * limit;
     const search = req.query.key;
     const nameTable = ['tbl_products'];
-    const name = [`productName LIKE '%${search}%'`];
+    const name = [`productName LIKE '%${search}%' OR color LIKE '%${search}%' OR description LIKE '%${search}%' OR price LIKE '%${search}%'`];
     connectDB.query(`SELECT * FROM ${nameTable} WHERE ${name} LIMIT ? OFFSET ?; SELECT * FROM ${nameTable} WHERE ${name}`, [limit, offset], (err, result) => {
         if (err)
             res.status(400).send({
