@@ -1,3 +1,4 @@
+require('dotenv').config();
 let carts = document.querySelectorAll('.product_cart_button');
 console.log('This is carts', carts)
 let cartItems = localStorage.getItem('productsIncart');
