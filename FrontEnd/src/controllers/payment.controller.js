@@ -1,8 +1,8 @@
 import axios from 'axios';
-
+const API_URL = process.env.API_URL || 'localhost:4500'
 module.exports.getPayment = (req, res) => {
     const page = req.query.page
-    axios.get('http://localhost:4500/payment?page=' + page)
+    axios.get(`${API_URL}/payment?page=${page}`)
         .then((response) => {
             let { returnOne, paymentAll, page, loginsuccess } = response.data
             res.render('manage/paymentInfo/index', {
@@ -23,7 +23,7 @@ module.exports.searchPayment = (req, res) => {
     let errorArr = [];
     const page = req.query.page
     const search = req.query.key;
-    axios.get('http://localhost:4500/payment/search?key=' + search + '&page=' + page)
+    axios.get(`${API_URL}/payment/search?key=${search}&page=${page}`)
         .then((response) => {
             let { result, search, page, paymentAll, loginsuccess } = response.data
             if (result.length === 0) {

@@ -1,11 +1,11 @@
 import { validationResult } from 'express-validator/check';
 import axios from 'axios';
+const API_URL = process.env.API_URL || 'localhost:4500'
 
-
-//get customer  view customers
+//get customer  view customers`${API_URL}
 module.exports.getCustomer = (req, res) => {
   let pages = req.query.page;
-  axios.get('http://localhost:4500/customer?page=' + pages)
+  axios.get(`${API_URL}/customer?page=${pages}`)
     .then((response) => {
       let { customers, customersAll, page, loginsuccess } = response.data;
       res.render('manage/customer/index', {
@@ -27,7 +27,7 @@ module.exports.getCustomer = (req, res) => {
 // delete customer
 module.exports.deleteCustomer = (req, res) => {
   let id = req.params.id;
-  axios.get('http://localhost:4500/customer/delete/' + id)
+  axios.get(`${API_URL}/customer/delete/${id}`)
     .then((response) => {
       let { successArr, errorArr } = response.data;
       if (errorArr) {
@@ -47,7 +47,7 @@ module.exports.deleteCustomer = (req, res) => {
 // get update
 module.exports.getUpdateCustomer = (req, res) => {
   let id = req.params.id;
-  axios.get('http://localhost:4500/customer/update/' + id)
+  axios.get(`${API_URL}/customer/update/${id}`)
     .then((response) => {
       let { customer, loginsuccess } = response.data;
       res.render('manage/customer/informationCustomer', {
@@ -76,7 +76,7 @@ module.exports.updateCustomer = (req, res) => {
     req.flash('errors', errorArr);
     return res.redirect('/customer/update/' + id);
   }
-  axios.post('http://localhost:4500/customer/update/' + id, values)
+  axios.post(`${API_URL}/customer/update/${id}`, values)
     .then((response) => {
       let { successArr, errorArr } = response.data;
       if (errorArr) {
@@ -96,7 +96,7 @@ module.exports.updateCustomer = (req, res) => {
 module.exports.searchCustomer = (req, res) => {
   const page = req.query.page;
   const search = req.query.key;
-  axios.get('http://localhost:4500/customer/search?key=' + search + '&page=' + page)
+  axios.get(`${API_URL}/customer/search?key=${search}&page=${page}`)
     .then((response) => {
       let { errorArr } = response.data;
       if (errorArr) {

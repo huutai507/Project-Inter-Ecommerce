@@ -1,7 +1,7 @@
 import { validationResult } from 'express-validator/check';
 import axios from 'axios'
 import { response } from 'express';
-
+const API_URL = process.env.API_URL || 'localhost:4500'
 let FCM = require('fcm-node');
 let serverKey = 'AAAALvxje6Q:APA91bEflP9zXkHTBit9aQUOvyay-1CmNvIuRaIJ7gwTt_uAQNcZZN8fSU0fwi7CNdfoZXSa4_THvnQo6tQuHjAOiHMcfvNkxOfc-2WjDsNRa0vP32aOx1Hx-xC6FyAL_fZ7nA8M4t5k'; //put your server key here
 let fcm = new FCM(serverKey);
@@ -9,7 +9,7 @@ let fcm = new FCM(serverKey);
 //get brand
 module.exports.getBrand = (req, res) => {
     let pages = req.query.page;
-    axios.get('http://localhost:4500/brand?page=' + pages)
+    axios.get(`${API_URL}/brand?page=${pages}`)
         .then((response) => {
             let { brands, brandsAll, page, loginsuccess } = response.data;
             res.render('manage/brand/index', {
@@ -29,7 +29,7 @@ module.exports.getBrand = (req, res) => {
 
 // get insert
 module.exports.getCreateBrand = (req, res) => {
-    axios.get('http://localhost:4500/brand/insert')
+    axios.get(`${API_URL}/brand/insert`)
         .then((response) => {
             let { loginsuccess } = response.data
             res.render('manage/brand/createBrand', {
@@ -56,7 +56,7 @@ module.exports.insertBrand = (req, res) => {
         req.flash('errors', errorArr);
         return res.redirect('/brand/insert');
     }
-    axios.post('http://localhost:4500/brand/insert', values)
+    axios.post(`${API_URL}/brand/insert`, values)
         .then((response) => {
             let { successArr, errorArr } = response.data;
             if (errorArr) {
@@ -74,7 +74,7 @@ module.exports.insertBrand = (req, res) => {
 // Get update
 module.exports.getUpdateBrand = (req, res) => {
     let id = req.params.id;
-    axios.get('http://localhost:4500/brand/update/' + id)
+    axios.get(`${API_URL}/brand/update/${id}`)
         .then((response) => {
             let { brand, loginsuccess } = response.data;
             res.render('manage/brand/informationBrand', {
@@ -103,7 +103,7 @@ module.exports.updateBrand = (req, res) => {
         req.flash('errors', errorArr);
         return res.redirect('/brand/update/' + id);
     }
-    axios.post('http://localhost:4500/brand/update/' + id, brandName)
+    axios.post(`${API_URL}/brand/update/${id}`, brandName)
         .then((response) => {
             let { successArr, errorArr } = response.data;
             if (errorArr) {
@@ -122,7 +122,7 @@ module.exports.updateBrand = (req, res) => {
 // Delete a category
 module.exports.deleteBrand = (req, res) => {
     let id = req.params.id;
-    axios.get('http://localhost:4500/brand/delete/' + id)
+    axios.get(`${API_URL}/brand/delete/${id}`)
         .then((response) => {
             let { successArr, errorArr } = response.data;
             if (errorArr) {
@@ -142,7 +142,7 @@ module.exports.deleteBrand = (req, res) => {
 module.exports.searchBrand = (req, res) => {
     const page = req.query.page;
     const search = req.query.key;
-    axios.get('http://localhost:4500/brand/search?key=' + search + '&page=' + page)
+    axios.get(`${API_URL}/brand/search?key=${search}&page=${page}`)
         .then((response) => {
             let { errorArr } = response.data;
             if (errorArr) {

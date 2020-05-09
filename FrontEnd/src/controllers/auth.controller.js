@@ -1,8 +1,9 @@
 
 import axios from 'axios';
 import { validationResult } from 'express-validator/check';
+const API_URL = process.env.API_URL || 'localhost:4500'
 module.exports.login = function (req, res) {
-    axios.get('http://localhost:4500/auth/login')
+    axios.get(`${API_URL}/auth/login`)
         .then(() => {
             res.render('./auth/login', {
                 errors: req.flash('errors')
@@ -17,7 +18,7 @@ module.exports.login = function (req, res) {
 };
 module.exports.loginPost = (req, res) => {
     const { account, password } = req.body
-    axios.post('http://localhost:4500/auth/login', {
+    axios.post(`${API_URL}/auth/login`, {
         account, password
     }).then((response) => {
         let errorArr = [];
@@ -72,7 +73,7 @@ module.exports.loginPost = (req, res) => {
 // register
 
 module.exports.register = (req, res) => {
-    axios.get('http://localhost:4500/auth/register')
+    axios.get(`${API_URL}/auth/register`)
         .then((response) => {
             let { loginsuccess } = response.data
             res.render('auth/register', {
@@ -97,7 +98,7 @@ module.exports.createRegister = (req, res) => {
         req.flash('errors', errorArr);
         return res.redirect('/auth/register');
     }
-    axios.post('http://localhost:4500/auth/register', req.body)
+    axios.post(`${API_URL}/auth/register`, req.body)
         .then((response) => {
             let { accountExist, successRegister } = response.data
             if (accountExist) {

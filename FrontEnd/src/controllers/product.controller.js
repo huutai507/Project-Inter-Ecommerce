@@ -2,11 +2,11 @@ import axios from 'axios';
 import cloudinary from '../config/cloudinaryConfig';
 import { validationResult } from 'express-validator/check';
 import { response } from 'express';
-
+const API_URL = process.env.API_URL || 'localhost:4500'
 // get product views all products
 module.exports.getProducts = (req, res) => {
     const page = req.query.page
-    axios.get('http://localhost:4500/product?page=' + page)
+    axios.get(`${API_URL}/product?page=${page}`)
         .then((response) => {
             let { products, productsAll, page, loginsuccess } = response.data
             res.render('manage/product/index', {
@@ -23,7 +23,7 @@ module.exports.getProducts = (req, res) => {
 };
 //get insert product
 module.exports.getInsertProduct = (req, res) => {
-    axios.get('http://localhost:4500/product/insert')
+    axios.get(`${API_URL}/product/insert`)
         .then((response) => {
             let { brandNames, categoryNames, loginsuccess } = response.data
             res.render('manage/product/createProduct', {
@@ -53,7 +53,7 @@ module.exports.insertProduct = async (req, res) => {
         return res.redirect('/product/insert');
     }
     let upload = await cloudinary.uploadSingle(req.file.path);
-    axios.post('http://localhost:4500/product/insert', { data, upload })
+    axios.post(`${API_URL}/product/insert`, { data, upload })
         .then((response) => {
             let { insertSuccess, productExist } = response.data
             if (insertSuccess) {
@@ -75,7 +75,7 @@ module.exports.insertProduct = async (req, res) => {
 // get update
 module.exports.getUpdateProduct = (req, res) => {
     let id = req.params.id;
-    axios.get('http://localhost:4500/product/update/' + id)
+    axios.get(`${API_URL}/product/update/${id}`)
         .then((response) => {
             let { item, brandNames, categoryNames, permission, name, loginsuccess } = response.data
             res.render('manage/product/productInformation', {
@@ -109,7 +109,7 @@ module.exports.updateProduct = async (req, res) => {
         return res.redirect('/product/insert');
     }
     let upload = await cloudinary.uploadSingle(req.file.path);
-    axios.post('http://localhost:4500/product/update/' + id, { data, upload })
+    axios.post(`${API_URL}/product/update/${id}`, { data, upload })
         .then((response) => {
             let { updateSuccess, productExist } = response.data
             if (updateSuccess) {
@@ -132,7 +132,7 @@ module.exports.deleteProduct = (req, res) => {
     let id = req.params.id;
     let errorArr = [];
     let successArr = [];
-    axios.get('http://localhost:4500/product/delete/' + id)
+    axios.get(`${API_URL}/product/delete/${id}`)
         .then((response) => {
             let { deleteProduct, deleteError, nameProduct } = response.data
             if (deleteError) {
@@ -152,7 +152,7 @@ module.exports.searchProduct = (req, res) => {
     let errorArr = [];
     const page = req.query.page;
     const search = req.query.key;
-    axios.get('http://localhost:4500/product/search?key=' + search + '&page=' + page)
+    axios.get(`${API_URL}/product/search?key=${search}&page=${page}`)
         .then((response) => {
             let { products, search, page, productsAll, loginsuccess } = response.data
             if (products.length === 0) {

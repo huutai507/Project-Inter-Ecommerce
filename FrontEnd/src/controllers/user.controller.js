@@ -1,11 +1,11 @@
 /* eslint-disable prefer-const */
 import { validationResult } from 'express-validator/check';
 import axios from 'axios'
-
+const API_URL = process.env.API_URL || 'localhost:4500'
 // views all user
 module.exports.viewUser = (req, res) => {
   let pages = req.query.page;
-  axios.get('http://localhost:4500/user?page=' + pages)
+  axios.get(`${API_URL}/user?page=${pages}`)
     .then((response) => {
       let { user, usersAll, page, loginsuccess } = response.data;
       res.render('manage/user/index', {
@@ -26,7 +26,7 @@ module.exports.viewUser = (req, res) => {
 //get update user
 module.exports.getUpdateUser = (req, res) => {
   let id = req.params.id;
-  axios.get('http://localhost:4500/user/update/' + id)
+  axios.get(`${API_URL}/user/update/${id}`)
     .then((response) => {
       let { inforUser, loginsuccess } = response.data;
       res.render('manage/user/informationUser', {
@@ -56,7 +56,7 @@ module.exports.updateUser = (req, res) => {
     req.flash('errors', errorArr);
     return res.redirect('/user/update/' + id);
   }
-  axios.post('http://localhost:4500/user/update/' + id, values)
+  axios.post(`${API_URL}/user/update/${id}`, values)
     .then((response) => {
       let { successArr, errorArr } = response.data;
       if (errorArr) {
@@ -74,7 +74,7 @@ module.exports.updateUser = (req, res) => {
 // set Defaul Passowrd
 module.exports.setDefaulPassword = (req, res) => {
   let id = req.params.id;
-  axios.post('http://localhost:4500/user/set-password/' + id)
+  axios.post(`${API_URL}/user/set-password/${id}`)
     .then((response) => {
       let { successArr } = response.data;
       req.flash('success', successArr);
@@ -86,7 +86,7 @@ module.exports.setDefaulPassword = (req, res) => {
 // Delete an user
 module.exports.deleteUser = (req, res) => {
   let id = req.params.id;
-  axios.get('http://localhost:4500/user/delete/' + id)
+  axios.get(`${API_URL}/user/delete/${id}`)
     .then((response) => {
       let { successArr } = response.data;
       req.flash('success', successArr);
@@ -97,7 +97,7 @@ module.exports.deleteUser = (req, res) => {
 };
 // get change Password
 module.exports.getChangePassword = (req, res) => {
-  axios.get('http://localhost:4500/user/change-password/')
+  axios.get(`${API_URL}/user/change-password/`)
     .then((response) => {
       let { loginsuccess } = response.data;
       res.render('manage/user/changePassword', {
@@ -125,7 +125,7 @@ module.exports.changePassword = (req, res) => {
     req.flash('errors', errorArr);
     return res.redirect('/user/change-password/');
   }
-  axios.post('http://localhost:4500/user/change-password/', { values, account })
+  axios.post(`${API_URL}/user/change-password/`, { values, account })
     .then((response) => {
       let { successArr, errorArr } = response.data;
       if (errorArr) {
@@ -143,7 +143,7 @@ module.exports.changePassword = (req, res) => {
 // get update-infor-user
 module.exports.getUpdateInfor = (req, res) => {
   const account = req.session.account;
-  axios.get('http://localhost:4500/user/update-info/' + account)
+  axios.get(`${API_URL}/user/update-info/${account}`)
     .then((response) => {
       let { inforUser, loginsuccess } = response.data;
       res.render('manage/user/updateInfo', {
@@ -172,7 +172,7 @@ module.exports.updateInfoUser = (req, res) => {
     req.flash('errors', errorArr);
     return res.redirect('/user/update-info');
   }
-  axios.post('http://localhost:4500/user/update-info/' + id, values)
+  axios.post(`${API_URL}/user/update-info/${id}`, values)
     .then((response) => {
       let { successArr, errorArr } = response.data;
       if (errorArr) {
@@ -191,7 +191,7 @@ module.exports.updateInfoUser = (req, res) => {
 module.exports.searchUser = (req, res) => {
   const page = req.query.page;
   const search = req.query.key;
-  axios.get('http://localhost:4500/user/search?key=' + search + '&page=' + page)
+  axios.get(`${API_URL}/user/search?key=${search}&page=${page}`)
     .then((response) => {
       let { errorArr } = response.data;
       if (errorArr) {

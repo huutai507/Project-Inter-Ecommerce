@@ -1,10 +1,10 @@
 import { validationResult } from 'express-validator/check';
 import axios from 'axios'
-
+const API_URL = process.env.API_URL || 'localhost:4500'
 // get category // views an Category
 module.exports.getCategory = (req, res) => {
     let pages = req.query.page;
-    axios.get('http://localhost:4500/category?page=' + pages)
+    axios.get(`${API_URL}/category?page=${pages}`)
         .then((response) => {
             let { category, categoryAll, page, loginsuccess } = response.data;
             res.render('manage/category/index', {
@@ -24,7 +24,7 @@ module.exports.getCategory = (req, res) => {
 
 // get insert
 module.exports.getInsertCategory = (req, res) => {
-    axios.get('http://localhost:4500/category/insert')
+    axios.get(`${API_URL}/category/insert`)
         .then((response) => {
             let { loginsuccess } = response.data
             res.render('manage/category/createCategory', {
@@ -51,7 +51,7 @@ module.exports.insertCategory = (req, res) => {
         req.flash('errors', errorArr);
         return res.redirect('/category/insert');
     }
-    axios.post('http://localhost:4500/category/insert', values)
+    axios.post(`${API_URL}/category/insert`, values)
         .then((response) => {
             let { successArr, errorArr } = response.data;
             if (errorArr) {
@@ -69,7 +69,7 @@ module.exports.insertCategory = (req, res) => {
 // get update
 module.exports.getUpdateCategory = (req, res) => {
     let id = req.params.id;
-    axios.get('http://localhost:4500/category/update/' + id)
+    axios.get(`${API_URL}/category/update/${id}`)
         .then((response) => {
             let { category, loginsuccess } = response.data;
             res.render('manage/category/informationCategory', {
@@ -98,7 +98,7 @@ module.exports.updateCategory = (req, res) => {
         req.flash('errors', errorArr);
         return res.redirect('/category/update/' + id);
     }
-    axios.post('http://localhost:4500/category/update/' + id, categoryName)
+    axios.post(`${API_URL}/category/update/${id}`, categoryName)
         .then((response) => {
             let { successArr, errorArr } = response.data;
             if (errorArr) {
@@ -117,7 +117,7 @@ module.exports.updateCategory = (req, res) => {
 // Delete a category
 module.exports.deleteCategory = (req, res) => {
     let id = req.params.id;
-    axios.get('http://localhost:4500/category/delete/' + id)
+    axios.get(`${API_URL}/category/delete/${id}`)
         .then((response) => {
             let { successArr, errorArr } = response.data;
             if (errorArr) {
@@ -136,7 +136,7 @@ module.exports.deleteCategory = (req, res) => {
 module.exports.searchCategory = (req, res) => {
     const page = req.query.page;
     const search = req.query.key;
-    axios.get('http://localhost:4500/category/search?key=' + search + '&page=' + page)
+    axios.get(`${API_URL}/category/search?key=${search}&page=${page}`)
         .then((response) => {
             let { errorArr } = response.data;
             if (errorArr) {

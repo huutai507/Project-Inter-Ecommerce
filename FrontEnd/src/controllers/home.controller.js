@@ -1,7 +1,7 @@
 import axios from 'axios'
-
+const API_URL = process.env.API_URL || 'localhost:4500'
 module.exports.getHome = (req, res) => {
-    axios.get('http://localhost:4500/')
+    axios.get(`${API_URL}`)
         .then((response) => {
             let { products, categories, brands, errors, jsonData } = response.data
             res.render('index', {
@@ -23,7 +23,7 @@ module.exports.getHome = (req, res) => {
 }
 // cart
 module.exports.getCart = (req, res) => {
-    axios.get('http://localhost:4500/cart')
+    axios.get(`${API_URL}/cart`)
         .then((response) => {
             let { stripePublicKey, categories, brands } = response.data
             res.render('cart', {
@@ -41,7 +41,7 @@ module.exports.getCart = (req, res) => {
 }
 
 module.exports.getContact = (req, res) => {
-    axios.get('http://localhost:4500/contact')
+    axios.get(`${API_URL}/contact`)
         .then((response) => {
             let { categories, brands } = response.data;
             res.render('contact', {
@@ -59,7 +59,7 @@ module.exports.getContact = (req, res) => {
 
 //  product detail
 module.exports.productDetail = (req, res) => {
-    axios.get('http://localhost:4500/product-details')
+    axios.get(`${API_URL}/product-details`)
         .then((response) => {
             let { categories, brands } = response.data
             res.render('productDetail', {
@@ -77,7 +77,7 @@ module.exports.productDetail = (req, res) => {
 // filter category
 module.exports.filterCategory = (req, res) => {
     let categoryId = req.params.id;
-    axios.get('http://localhost:4500/filter-category/' + categoryId)
+    axios.get(`${API_URL}/filter-category/${categoryId}`)
         .then((response) => {
             let { products, categories, brands, errors, jsonData } = response.data;
             res.render('main/filter/filter', {
@@ -102,7 +102,7 @@ module.exports.filterCategory = (req, res) => {
 // filter Brand
 module.exports.filterBrand = (req, res) => {
     let brandId = req.params.id;
-    axios.get('http://localhost:4500/filter-brand/' + brandId)
+    axios.get(`${API_URL}/filter-brand/${brandId}`)
         .then((response) => {
             let { products, categories, brands, errors, jsonData } = response.data;
             res.render('main/filter/filter', {
@@ -127,7 +127,7 @@ module.exports.filterBrand = (req, res) => {
 // search
 module.exports.search = (req, res) => {
     const search = req.query.key;
-    axios.get('http://localhost:4500/search/?key=' + search)
+    axios.get(`${API_URL}/search/?key=${search}`)
         .then((response) => {
             let { products, categories, brands, errors, jsonData } = response.data
             res.render('main/filter/filter', {
@@ -152,7 +152,7 @@ module.exports.search = (req, res) => {
 module.exports.filterPrice = (req, res) => {
     const from = req.query.from;
     const to = req.query.to;
-    axios.get('http://localhost:4500/filter-price/?from=' + from + '&to=' + to)
+    axios.get(`${API_URL}/filter-price/?from=${from}&to=${to}`)
         .then((response) => {
             let { products, categories, brands, errors, jsonData } = response.data;
             res.render('main/filter/filter', {
