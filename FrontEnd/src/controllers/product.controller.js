@@ -2,7 +2,7 @@ import axios from 'axios';
 import cloudinary from '../config/cloudinaryConfig';
 import { validationResult } from 'express-validator/check';
 import { response } from 'express';
-const API_URL = process.env.API_URL || 'localhost:4500'
+const API_URL = process.env.API_URL || 'http://localhost:4500'
 // get product views all products
 module.exports.getProducts = (req, res) => {
     const page = req.query.page

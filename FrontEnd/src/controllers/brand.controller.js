@@ -1,7 +1,7 @@
 import { validationResult } from 'express-validator/check';
 import axios from 'axios'
 import { response } from 'express';
-const API_URL = process.env.API_URL || 'localhost:4500'
+const API_URL = process.env.API_URL || 'http://localhost:4500'
 let FCM = require('fcm-node');
 let serverKey = 'AAAALvxje6Q:APA91bEflP9zXkHTBit9aQUOvyay-1CmNvIuRaIJ7gwTt_uAQNcZZN8fSU0fwi7CNdfoZXSa4_THvnQo6tQuHjAOiHMcfvNkxOfc-2WjDsNRa0vP32aOx1Hx-xC6FyAL_fZ7nA8M4t5k'; //put your server key here
 let fcm = new FCM(serverKey);

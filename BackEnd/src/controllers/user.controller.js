@@ -1,6 +1,5 @@
 /* eslint-disable prefer-const */
 import sha1 from 'sha1';
-import { validationResult } from 'express-validator/check';
 import connectDB from '../config/connectDB';
 
 // views all user

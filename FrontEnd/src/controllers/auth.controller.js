@@ -1,7 +1,7 @@
 
 import axios from 'axios';
 import { validationResult } from 'express-validator/check';
-const API_URL = process.env.API_URL || 'localhost:4500'
+const API_URL = process.env.API_URL || 'http://localhost:4500'
 module.exports.login = function (req, res) {
     axios.get(`${API_URL}/auth/login`)
         .then(() => {
