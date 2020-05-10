@@ -1,6 +1,6 @@
 import { validationResult } from 'express-validator/check';
 import axios from 'axios';
-const API_URL = process.env.API_URL || 'localhost:4500'
+const API_URL = process.env.API_URL || 'http://localhost:4500'
 
 //get customer  view customers`${API_URL}
 module.exports.getCustomer = (req, res) => {

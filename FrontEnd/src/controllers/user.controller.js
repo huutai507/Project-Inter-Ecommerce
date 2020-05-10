@@ -1,7 +1,7 @@
 /* eslint-disable prefer-const */
 import { validationResult } from 'express-validator/check';
 import axios from 'axios'
-const API_URL = process.env.API_URL || 'localhost:4500'
+const API_URL = process.env.API_URL || 'http://localhost:4500'
 // views all user
 module.exports.viewUser = (req, res) => {
   let pages = req.query.page;

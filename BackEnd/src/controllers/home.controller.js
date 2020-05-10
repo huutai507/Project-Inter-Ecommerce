@@ -16,7 +16,8 @@ module.exports.getHome = (req, res) => {
 module.exports.getCart = (req, res) => {
     let sql = 'SELECT * FROM tbl_products; SELECT * FROM tbl_categories; SELECT * FROM tbl_brands ';
     connectDB.query(sql, (err, result) => {
-        let [categories, brands] = result;
+        let categories = result[1];
+        let brands = result[2];
         res.json({ stripePublicKey, categories, brands })
 
     })

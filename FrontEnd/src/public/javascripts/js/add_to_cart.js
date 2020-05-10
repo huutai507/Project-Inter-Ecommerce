@@ -1,8 +1,6 @@
-require('dotenv').config();
 let carts = document.querySelectorAll('.product_cart_button');
 console.log('This is carts', carts)
 let cartItems = localStorage.getItem('productsIncart');
-const API_URL = process.env.API_URL || 'localhost:4500'
 
 async function sendData() {
     let sendTokenToServer = await messaging.getToken()
@@ -34,7 +32,7 @@ async function sendData() {
         key: stripePublicKey,
         locale: 'en',
         token: function (token) {
-            axios.post(`${API_URL}/order`, {
+            axios.post(`http://localhost:4500/order`, {
                 data: inforCustomer,
                 stripeTokenId: token.id,
                 token,
