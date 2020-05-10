@@ -1,6 +1,6 @@
 import alert from 'alert-node';
 import axios from 'axios';
-const API_URL = process.env.API_URL || 'localhost:4500'
+const API_URL = process.env.API_URL || 'http://localhost:4500'
 module.exports.getOrder = (req, res) => {
 
 }

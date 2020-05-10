@@ -1,6 +1,6 @@
 import { validationResult } from 'express-validator/check';
 import axios from 'axios'
-const API_URL = process.env.API_URL || 'localhost:4500'
+const API_URL = process.env.API_URL || 'http://localhost:4500'
 // get category // views an Category
 module.exports.getCategory = (req, res) => {
     let pages = req.query.page;
