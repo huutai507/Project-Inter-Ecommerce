@@ -259,10 +259,9 @@ module.exports.getOrder = (req, res) => {
                         })
                     })
                 })
+                res.json({ paymentSuccess: true })
             }
-
         );
-
     }).catch(function (err) {
         console.log(err)
     })
