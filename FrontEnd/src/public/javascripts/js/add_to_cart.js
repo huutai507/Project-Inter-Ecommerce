@@ -39,6 +39,12 @@ async function sendData() {
                 totalCost,
                 tokenMessage: sendTokenToServer
             }).then((response) => {
+                if (response.data.paymentSuccess) {
+                    localStorage.removeItem("cartNumbers");
+                    localStorage.removeItem("productsIncart");
+                    localStorage.removeItem("totalCost");
+                    location.reload();
+                }
             })
             alert('Thanks for payment. Please check your email !')
 
@@ -257,7 +263,9 @@ function deleteButtons() {
 }
 
 function clearCart() {
-    localStorage.clear();
+    localStorage.removeItem("cartNumbers");
+    localStorage.removeItem("productsIncart");
+    localStorage.removeItem("totalCost");
     location.reload();
 
 }
