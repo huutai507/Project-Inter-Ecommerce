@@ -106,7 +106,7 @@ module.exports.getOrder = (req, res) => {
                                         let dateAndTime = `( Date ${today.getDate()} Month ${today.getMonth() + 1} Year ${today.getFullYear()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()})`
                                         const msg = {
                                             to: dataClient.data.email,
-                                            from: `huutai050798@gmail.com`,
+                                            from: `nguyenhongthai2403@gmail.com`,
                                             subject: `Order # ${idOrder} is ready to ship`,
                                             text: `The order is ready for delivery to you ${dataClient.data.name}`,
                                             html: `
