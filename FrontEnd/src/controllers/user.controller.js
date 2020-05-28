@@ -88,9 +88,15 @@ module.exports.deleteUser = (req, res) => {
   let id = req.params.id;
   axios.get(`${API_URL}/user/delete/${id}`)
     .then((response) => {
-      let { successArr } = response.data;
-      req.flash('success', successArr);
-      return res.redirect('/user')
+      let { successArr, errorArr } = response.data;
+      if (errorArr) {
+        req.flash('errors', errorArr);
+        return res.redirect('/user');
+      }
+      if (successArr) {
+        req.flash('success', successArr);
+        return res.redirect('/user')
+      }
     }).catch((error) => {
       res.redirect('/user')
     })

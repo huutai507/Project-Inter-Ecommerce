@@ -78,8 +78,9 @@ module.exports.setDefaulPassword = (req, res) => {
 module.exports.deleteUser = (req, res) => {
   let id = req.params.id;
   let successArr = [];
+  let errorArr = [];
   connectDB.query(
-    'SELECT * FROM tbl_users where id= ? ; DELETE FROM `tbl_users` WHERE id = ?', [id, id],
+    `SELECT * FROM tbl_users where id= ? ; DELETE FROM tbl_users WHERE id = ? AND permission = 'STAFF'`, [id, id],
     (err, result) => {
       if (err) {
         res.status(400).send({
@@ -87,8 +88,14 @@ module.exports.deleteUser = (req, res) => {
           message: 'Fail to query database'
         });
       }
-      successArr.push(`Deleted account:  ${result[0][0].account}`);
-      res.json({ successArr: successArr });
+      if(result[1].affectedRows === 1){
+        successArr.push(`Deleted account:  ${result[0][0].account}`);
+        res.json({ successArr: successArr });
+      }
+      else{
+        errorArr.push(`Cannot delete admin account: ${result[0][0].account}`);
+        res.json({ errorArr: errorArr });
+      }
     }
   );
 };
