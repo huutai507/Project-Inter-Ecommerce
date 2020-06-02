@@ -66,11 +66,17 @@
                                                         name="color" value="<%= item.color %>"
                                                         placeholder="Email address" required>
                                                 </div>
+                                                <div class="form-label-group" style="display: none;">
+                                                    <label for="inputProductColor">Image origin</label>
+                                                    <input type="text" id="inputProductColor" class="form-control"
+                                                        name="image" value="<%= item.image %>">
+                                                </div>
                                                 <div class="form-label-group">
                                                     <label for="inputProductImage">Image</label>
                                                     <img style="height: 100px ;height: 100px;" src=" <%= item.image %>"
                                                         alt="">
-                                                    <input type="file" class="form-control" name="image" required>
+                                                    <input type="file" name="image" value="src/abc"
+                                                        class="form-control">
                                                 </div>
                                                 <div class="form-label-group">
                                                     <!-- <label for="inputProductDescription">Description</label>
