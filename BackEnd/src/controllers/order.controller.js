@@ -103,12 +103,12 @@ module.exports.getOrder = (req, res) => {
                                             `
                                         })
                                         let today = new Date();
-                                        let dateAndTime = `( Ngày ${today.getDate()} Tháng ${today.getMonth() + 1} Năm ${today.getFullYear()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()})`
+                                        let dateAndTime = `( Date ${today.getDate()} Month ${today.getMonth() + 1} Year ${today.getFullYear()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()})`
                                         const msg = {
                                             to: dataClient.data.email,
-                                            from: `huutai050798@gmail.com`,
-                                            subject: `Đơn hàng #${idOrder} đã sẵn sàng giao đến quý khách`,
-                                            text: `Đơn hàng đã sẵn sàng giao đến quý khách ${dataClient.data.name}`,
+                                            from: `nguyenhongthai2403@gmail.com`,
+                                            subject: `Order # ${idOrder} is ready to ship`,
+                                            text: `The order is ready for delivery to you ${dataClient.data.name}`,
                                             html: `
                                             <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#dcf0f8" style="margin:0;padding:0;background-color:#f2f2f2;width:100%!important;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#444;line-height:18px">
                                             <tbody>
@@ -137,11 +137,11 @@ module.exports.getOrder = (req, res) => {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <h1 style="font-size:14px;font-weight:bold;color:#444;padding:0 0 5px 0;margin:0">Đơn hàng đã sẵn sàng để giao đến quý khách ${dataClient.data.name} !
+                                                                                        <h1 style="font-size:14px;font-weight:bold;color:#444;padding:0 0 5px 0;margin:0">The order is ready to be delivered to you ${dataClient.data.name} !
                                                                                         </h1>
                                                                                         <p style="margin:4px 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#444;line-height:18px;font-weight:normal">
                                                                                         </p>
-                                                                                        <h3 style="font-size:13px;font-weight:bold;color:#02acea;text-transform:uppercase;margin:20px 0 0 0;border-bottom:1px solid #ddd">Thông tin đơn hàng #${idOrder} <span style="font-size:12px;color:#777;text-transform:none;font-weight:normal">${dateAndTime}</span> </h3>
+                                                                                        <h3 style="font-size:13px;font-weight:bold;color:#02acea;text-transform:uppercase;margin:20px 0 0 0;border-bottom:1px solid #ddd">Order information #${idOrder} <span style="font-size:12px;color:#777;text-transform:none;font-weight:normal">${dateAndTime}</span> </h3>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -151,8 +151,8 @@ module.exports.getOrder = (req, res) => {
                                                                                         <table cellspacing="0" cellpadding="0" border="0" width="100%">
                                                                                             <thead>
                                                                                                 <tr>
-                                                                                                    <th align="left" width="50%" style="padding:6px 9px 0px 9px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#444;font-weight:bold">Thông tin thanh toán</th>
-                                                                                                    <th align="left" width="50%" style="padding:6px 9px 0px 9px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#444;font-weight:bold">Địa chỉ giao hàng</th>
+                                                                                                    <th align="left" width="50%" style="padding:6px 9px 0px 9px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#444;font-weight:bold">Billing Information</th>
+                                                                                                    <th align="left" width="50%" style="padding:6px 9px 0px 9px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#444;font-weight:bold">Delivery address</th>
                                                                                                 </tr>
                                                                                             </thead>
                                                                                             <tbody>
@@ -163,17 +163,17 @@ module.exports.getOrder = (req, res) => {
                                     
                                                                                                     </td>
                                                                                                     <td valign="top" style="padding:3px 9px 9px 9px;border-top:0;border-left:0;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#444;line-height:18px;font-weight:normal">
-                                                                                                    ${dataClient.data.name}<br> ${dataClient.data.address}, <br> Việt Nam<br> T: ${dataClient.data.phoneNumber}
+                                                                                                    ${dataClient.data.name}<br> ${dataClient.data.address}, <br> VIET NAM<br> T: ${dataClient.data.phoneNumber}
                                                                                                     </td>
                                                                                                 </tr>
                                                                                                 <tr>
                                                                                                     <td valign="top" style="padding:7px 9px 0px 9px;border-top:0;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#444" colspan="2">
                                                                                                         <p style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#444;font-weight:normal">
                                                                                                             <br>
-                                                                                                            <strong>Phí vận chuyển: </strong>Free&nbsp;$
+                                                                                                            <strong>Transport fee: </strong>Free&nbsp;$
                                                                                                             <br>
-                                                                                                            <strong>Phương thức thanh toán: </strong>Thanh toán qua thẻ tín dụng
-                                                                                                            <br><strong>Xuất hóa đơn đỏ: </strong>${dataClient.data.name}<br> ------- <br> ${dataClient.data.address}
+                                                                                                            <strong>Payment methods: </strong>Payment by credit card
+                                                                                                            <br><strong>Invoice: </strong>${dataClient.data.name}<br> ------- <br> ${dataClient.data.address}
                                                                                                         </p>
                                                                                                     </td>
                                                                                                 </tr>
@@ -184,21 +184,21 @@ module.exports.getOrder = (req, res) => {
                                     
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <h2 style="text-align:left;margin:10px 0;border-bottom:1px solid #ddd;padding-bottom:5px;font-size:13px;color:#02acea">CHI TIẾT ĐƠN HÀNG</h2>
+                                                                                        <h2 style="text-align:left;margin:10px 0;border-bottom:1px solid #ddd;padding-bottom:5px;font-size:13px;color:#02acea">ORDER DETAILS</h2>
                                                                                         <table cellspacing="0" cellpadding="0" border="0" width="100%" style="background:#f5f5f5">
                                                                                             <thead>
                                                                                                 <tr>
-                                                                                                    <th align="left" bgcolor="#02acea" style="padding:6px 9px;color:#fff;text-transform:uppercase;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:14px">Sản phẩm</th>
-                                                                                                    <th align="left" bgcolor="#02acea" style="padding:6px 9px;color:#fff;text-transform:uppercase;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:14px"> Đơn giá</th>
-                                                                                                    <th align="left" bgcolor="#02acea" style="padding:6px 9px;color:#fff;text-transform:uppercase;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:14px">Số lượng</th>
-                                                                                                    <th align="left" bgcolor="#02acea" style="padding:6px 9px;color:#fff;text-transform:uppercase;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:14px">Giảm giá</th>
-                                                                                                    <th align="right" bgcolor="#02acea" style="padding:6px 9px;color:#fff;text-transform:uppercase;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:14px">Tổng tạm</th>
+                                                                                                    <th align="left" bgcolor="#02acea" style="padding:6px 9px;color:#fff;text-transform:uppercase;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:14px">Product</th>
+                                                                                                    <th align="left" bgcolor="#02acea" style="padding:6px 9px;color:#fff;text-transform:uppercase;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:14px">Unit price</th>
+                                                                                                    <th align="left" bgcolor="#02acea" style="padding:6px 9px;color:#fff;text-transform:uppercase;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:14px">Amount</th>
+                                                                                                    <th align="left" bgcolor="#02acea" style="padding:6px 9px;color:#fff;text-transform:uppercase;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:14px">Discount</th>
+                                                                                                    <th align="right" bgcolor="#02acea" style="padding:6px 9px;color:#fff;text-transform:uppercase;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:14px">Total</th>
                                                                                                 </tr>
                                                                                             </thead>
                                                                                             ${sendingProduct}
                                                                                             <tfoot style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#444;line-height:18px">
                                                                                                 <tr bgcolor="#eee">
-                                                                                                    <td colspan="4" align="right" style="padding:7px 9px"><strong><big>Tổng giá trị đơn hàng</big></strong></td>
+                                                                                                    <td colspan="4" align="right" style="padding:7px 9px"><strong><big>The total value of the order</big></strong></td>
                                                                                                     <td align="right" style="padding:7px 9px"><strong><big><span>${totalCost}&nbsp;$</span></big></strong></td>
                                                                                                 </tr>
                                                                                             </tfoot>
@@ -212,15 +212,15 @@ module.exports.getOrder = (req, res) => {
                                                                                     <td>
                                                                                         <br>
                                                                                         <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#444;line-height:18px;font-weight:normal">
-                                                                                            Quý khách có thể kiểm tra ngoại quan sản phẩm (nhãn hiệu, mẫu mã, màu sắc, số lượng, ...) trước khi thanh toán và có thể từ chối nhận hàng nếu không ưng ý. Vui lòng không kích hoạt các thiết bị điện máy-điện tử hoặc dùng thử sản phẩm.
+                                                                                            You can check the appearance of the product (brand, model, color, quantity, ...) before payment and can refuse to receive the goods if not satisfied. Please do not activate electro-electronic devices or try the product.
                                                                                         </p>
                                                                                         <br>
                                                                                         <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#444;line-height:18px;font-weight:normal">
-                                                                                            Nếu sản phẩm có dấu hiệu hư hỏng/ bể vỡ hoặc không đúng với thông tin trên website, bạn vui lòng liên hệ với chúng tôi trong vòng 48 giờ kể từ thời điểm nhận hàng để được hỗ trợ.
+                                                                                            If the product shows signs of damage / breakage or does not match the information on the website, please contact us within 72 hours of receipt of goods for assistance.
                                                                                         </p>
                                                                                         <br>
                                                                                         <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#444;line-height:18px;font-weight:normal">
-                                                                                            Quý khách vui lòng giữ lại hóa đơn, hộp sản phẩm và phiếu bảo hành (nếu có) để đổi trả hàng hoặc bảo hành khi cần thiết.
+                                                                                            Please retain the invoice, product box and warranty card (if any) for return or warranty when necessary.
                                                                                         </p>
                                                                                     </td>
                                                                                 </tr>
