@@ -99,6 +99,8 @@ module.exports.updateProduct = async (req, res) => {
     let errorArr = [];
     let successArr = [];
     let data = req.body
+    console.log(req.body)
+    let upload
     const validationErros = await validationResult(req);
     if (!validationErros.isEmpty()) {
         const errors = Object.values(validationErros.mapped());
@@ -108,7 +110,9 @@ module.exports.updateProduct = async (req, res) => {
         req.flash('errors', errorArr);
         return res.redirect('/product/insert');
     }
-    let upload = await cloudinary.uploadSingle(req.file.path);
+    if (req.file) {
+        upload = await cloudinary.uploadSingle(req.file.path);
+    }
     axios.post(`${API_URL}/product/update/${id}`, { data, upload })
         .then((response) => {
             let { updateSuccess, productExist } = response.data
