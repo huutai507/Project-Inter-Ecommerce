@@ -72,7 +72,7 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="/brand/delete/<%= item.id %>" class="text-decorection-none">
+                                        <a onclick="return confirm('Do you want to delete <%= item.brandName %>?')" href="/brand/delete/<%= item.id %>" class="text-decorection-none">
                                             <button type="button" class="btn btn-danger">Delete</button>
                                         </a>
                                     </td>
