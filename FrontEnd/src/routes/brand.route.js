@@ -1,7 +1,6 @@
 import express from 'express';
 import controller from '../controllers/brand.controller';
 import validate from '../validation/brand.validate';
-import middleware from '../middleware/brand.middleware'
 
 const router = express.Router();
 

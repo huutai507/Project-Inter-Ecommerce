@@ -1,7 +1,6 @@
 import express from 'express';
 import controller from '../controllers/category.controller';
 import validate from '../validation/category.validate';
-import middleware from '../middleware/category.middleware'
 
 const router = express.Router();
 
