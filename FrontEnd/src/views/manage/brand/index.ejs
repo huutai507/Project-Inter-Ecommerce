@@ -83,8 +83,8 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="/brand/delete/<%= item.id %>" class="text-decorection-none">
-                                            <button type="button" class="btn btn-danger">Delete</button>
+                                        <a onclick="return confirm('Do you want to delete <%= item.brandName %>?')" href="/brand/delete/<%= item.id %>" class="text-decorection-none">
+                                            <button type="button" class="btn btn-danger" >Delete</button>
                                         </a>
                                     </td>
                                 </tr>
@@ -187,7 +187,6 @@
             <!-- Page level custom scripts -->
             <script src="/admin/js/demo/chart-area-demo.js"></script>
             <script src="/admin/js/demo/chart-pie-demo.js"></script>
-
 </body>
 
 </html>
