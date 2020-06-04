@@ -87,10 +87,8 @@ module.exports.getUpdateProduct = (req, res) => {
 
 module.exports.updateProduct = async (req, res) => {
     const emp = req.body.data;
-    console.log('This is reqbody', req.body.data)
     let upload
     req.body.upload === undefined ? upload = req.body.data.image : upload = req.body.upload.url
-    console.log('This is upload', upload)
     // if (!req.body.upload.url) {
     //     upload = req.body.data.image
     // }

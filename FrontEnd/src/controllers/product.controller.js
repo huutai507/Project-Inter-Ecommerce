@@ -99,7 +99,6 @@ module.exports.updateProduct = async (req, res) => {
     let errorArr = [];
     let successArr = [];
     let data = req.body
-    console.log(req.body)
     let upload
     const validationErros = await validationResult(req);
     if (!validationErros.isEmpty()) {

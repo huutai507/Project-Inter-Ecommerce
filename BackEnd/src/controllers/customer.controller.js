@@ -30,7 +30,7 @@ module.exports.deleteCustomer = (req, res) => {
     (err, result) => {
       if (err) {
         errorArr.push(
-          `Cannot be deleted "${result[0][0].customerName}"`
+          `Cannot be deleted "${result[0][0].customerName} because it ordered"`
         );
         return res.json({ errorArr: errorArr });
       }

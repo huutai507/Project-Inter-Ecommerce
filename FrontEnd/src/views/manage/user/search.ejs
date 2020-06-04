@@ -85,8 +85,13 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="/user/delete/<%= item.id %>" class="text-decorection-none">
+                                        <a onclick="return confirm('Do you want to delete <%= item.account %>?')" href="/user/delete/<%= item.id %>" class="text-decorection-none">
                                             <button type="button" class="btn btn-danger">Delete</button>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a onclick="return confirm('Do you want to set defaul password <%= item.account %>?')" href="/user/set-password/<%= item.id %>" class="text-decorection-none">
+                                            <button type="button" class="btn btn-warning">Set.Password</button>
                                         </a>
                                     </td>
                                 </tr>
