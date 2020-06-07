@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-lg-10 offset-lg-1">
                 <div class="cart_container">
-                    <div class="cart_title">Shopping Cart</div>
+                    <div class="cart_title"><%= __('Shopping cart') %></div>
                     <!-- Cart Item -->
                     <div class="cart_items">
                     </div>
@@ -13,14 +13,15 @@
                         </div>
                     </div>
                     <div class="information_user">
-                        <div style="display:flex; flex-direction:start; align-items:center;">
+                        <div style="display:flex; flex-direction:start; align-items:center; ">
                             <div class="form-label-group mt-4" style="width:25%; margin:0 20px 0 0">
-                                <div>Your name</div>
-                                <input type="text" class="form-control customerName" required />
+                                <div><%= __('Your name') %></div>
+                                <input type="text" class="form-control customerName" style="color: #333;" required />
                             </div>
-                            <div class="form-label-group mt-4" style="width:25%; margin:0 30px 0 0">
-                                <div>Date Of Birth</div>
-                                <input type="date" class="form-control date-of-birth" required />
+                            <div class="form-label-group mt-4" style="width:25%; margin:0 30px 0 0;display: none;">
+                                <div><%= __('Date of brith') %></div>
+                                <input type="date" id="theDate" class="form-control date-of-birth"
+                                    style="color: #333;" />
                             </div>
                             <div class="form-label-group" style="margin-top:55px">
                                 <div class="d-flex">
@@ -28,14 +29,15 @@
                                         <i class="fas fa-mars"></i>
                                         <label for="gender">
                                             <input type="radio" class="form-control gender" name="gender" value="Male"
-                                                style="width: 25px; height: 25px;" checked /> Male
+                                                style="color: #333;width: 25px; height: 25px;" checked />
+                                            <%= __('Male') %>
                                         </label>
                                     </span>
                                     <span style="margin-left: 10px;">
                                         <i class="fas fa-venus"></i>
                                         <label for="gender">
                                             <input type="radio" class="form-control gender" name="gender" value="Female"
-                                                style="color: black; width: 25px; height: 25px;" /> Female
+                                                style="color: #333; width: 25px; height: 25px;" /> <%= __('Female') %>
                                         </label>
                                     </span>
                                 </div>
@@ -43,23 +45,25 @@
                         </div>
                         <div style="display:flex">
                             <div class="form-label-group mt-4" style="width:25%; margin:0 20px 0 0 ">
-                                <div>Number phone</div>
-                                <input type="text" class="form-control number-phone" required />
+                                <div><%= __('Number phone') %></div>
+                                <input type="text" class="form-control number-phone" style="color: #333;" required />
                             </div>
                             <div class="form-label-group mt-4" style="width:25%">
                                 <div>Email</div>
-                                <input type="email" class="form-control email" required />
+                                <input type="email" class="form-control email" style="color: #333;" required />
                             </div>
                         </div>
                         <div class="form-label-group mt-4">
-                            <div>Address</div>
-                            <input type="text" class="form-control address" required />
+                            <div><%= __('Address') %></div>
+                            <input type="text" class="form-control address" style="color: #333;" required />
                         </div>
                     </div>
 
                     <div class="cart_buttons">
-                        <button type="button" onclick="clearCart()" class="button cart_button_clear">Clear</button>
-                        <button class="button cart_button_checkout" type="submit" onclick="sendData();">Payment</button>
+                        <button type="button" onclick="clearCart()"
+                            class="button cart_button_clear"><%= __('Clear') %></button>
+                        <button class="button cart_button_checkout" type="submit"
+                            onclick="sendData();"><%= __('Payment') %></button>
                     </div>
                 </div>
             </div>

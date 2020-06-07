@@ -4,7 +4,7 @@
             <div class="col">
                 <div class="tabbed_container">
                     <div class="tabs clearfix tabs-right">
-                        <div class="new_arrivals_title" id="listOfProduct"><%= __('List of Products') %></div>
+                        <div class="new_arrivals_title" id="listOfProduct"><%= __('List of products') %></div>
                         <ul class="clearfix">
                             <li class="active">
                                 <%= __('All products') %>
@@ -59,24 +59,24 @@
                                             </a>
                                             <div class="product_extras">
                                                 <a href="/cart">
-                                                    <button class="product_cart_button">Add to Cart</button>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <%  }); %>
-                                                </div>
-                                                <div class="arrivals_slider_dots_cover"></div>
-                                                <div>
-                                                    <h3 style="color: blue; display: flex; justify-content: center;">
-                                                        <%=errors%>
-                                                    </h3>
-                                                </div>
+                                                    <button class="product_cart_button"><%= __('Add to cart') %></button>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
+                                <%  }); %>
+                            </div>
+                            <div class="arrivals_slider_dots_cover"></div>
+                            <div>
+                                <h3 style="color: blue; display: flex; justify-content: center;">
+                                    <%=errors%>
+                                </h3>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+</div>
