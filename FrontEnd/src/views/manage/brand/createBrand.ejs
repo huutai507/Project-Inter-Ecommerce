@@ -18,6 +18,7 @@
     <!-- Custom styles for this template-->
     <link href="/admin/css/sb-admin-2.min.css" rel="stylesheet">
     <link rel="icon" href="/images/images/computer.png" type="image/png">
+    <script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
 
 </head>
 
@@ -48,8 +49,13 @@
                                         <h5 class="card-title text-center">Add Brand</h5>
                                         <form class="form-signin" method="POST" action="/brand/insert">
                                             <div class="form-label-group">
+                                                <label for="inputBrandName">Brand Name</label>
                                                 <input type="text" id="inputBrandName" class="form-control"
                                                     name="brandName" placeholder="Brand Name" required autofocus>
+                                            </div>
+                                            <div class="form-label-group mt-1">
+                                                <label for="descriptionBrand">Description</label>
+                                                <textarea name="descriptionBrand" id="editor" cols="30" rows="10"></textarea>                  
                                             </div>
                                             <button class="btn btn-lg btn-primary btn-block text-uppercase mt-3"
                                                 type="submit">Add</button>
@@ -96,6 +102,7 @@
         </div>
     </div>
     <script>
+        CKEDITOR.replace('editor');
     </script>
     <!-- Bootstrap core JavaScript-->
     <script src="/admin/vendor/jquery/jquery.min.js"></script>

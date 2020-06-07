@@ -45,7 +45,7 @@ module.exports.getCreateBrand = (req, res) => {
 };
 // insert a Brand
 module.exports.insertBrand = (req, res) => {
-    const values = [req.body.brandName];
+    const values = req.body;
     let errorArr = [];
     const validationErros = validationResult(req);
     if (!validationErros.isEmpty()) {
@@ -56,7 +56,7 @@ module.exports.insertBrand = (req, res) => {
         req.flash('errors', errorArr);
         return res.redirect('/brand/insert');
     }
-    axios.post(`${API_URL}/brand/insert`, values)
+    axios.post(`${API_URL}/brand/insert`, {values})
         .then((response) => {
             let { successArr, errorArr } = response.data;
             if (errorArr) {
@@ -91,7 +91,7 @@ module.exports.getUpdateBrand = (req, res) => {
 }
 // update a Brand
 module.exports.updateBrand = (req, res) => {
-    let brandName = [req.body.brandName];
+    const values = req.body;
     let id = req.params.id;
     let errorArr = [];
     const validationErros = validationResult(req);
@@ -103,7 +103,7 @@ module.exports.updateBrand = (req, res) => {
         req.flash('errors', errorArr);
         return res.redirect('/brand/update/' + id);
     }
-    axios.post(`${API_URL}/brand/update/${id}`, brandName)
+    axios.post(`${API_URL}/brand/update/${id}`, {values})
         .then((response) => {
             let { successArr, errorArr } = response.data;
             if (errorArr) {
