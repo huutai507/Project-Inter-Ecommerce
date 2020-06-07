@@ -31,18 +31,19 @@ module.exports.getCreateBrand = (req, res) => {
 };
 // insert a Brand
 module.exports.insertBrand = (req, res) => {
-    const values = req.body;
+    const emp = req.body.values;
+    const values = [emp.brandName, emp.descriptionName || 'No description available'];
     let successArr = [];
     // query
     connectDB.query(
-        'INSERT INTO `tbl_brands`(`brandName`) VALUES (?)', [values],
+        'INSERT INTO `tbl_brands`(`brandName`, `description`) VALUES (?)', [values],
         (err, result) => {
             if (err)
                 res.status(400).send({
                     status: 400,
                     message: 'Fail to query database'
                 });
-            successArr.push(`Add "${values}" successful`);
+            successArr.push(`Add "${emp.brandName}" successful`);
             res.json({ successArr: successArr });
         }
     );
@@ -63,11 +64,12 @@ module.exports.getUpdateBrand = (req, res) => {
 }
 // update a Brand
 module.exports.updateBrand = (req, res) => {
-    const brandName = req.body;
+    const brandName = req.body.values.brandName;
+    const description = req.body.values.description;
     let id = req.params.id;
     let successArr = [];
     connectDB.query(
-        'UPDATE `tbl_brands` SET `brandName`= ? WHERE id = ?', [brandName, id],
+        'UPDATE `tbl_brands` SET `brandName`= ?, `description`= ? WHERE id = ?', [brandName, description, id],
         (err, result) => {
             if (err) {
                 res.status(400).send({

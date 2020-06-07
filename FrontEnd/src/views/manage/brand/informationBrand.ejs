@@ -20,6 +20,8 @@
     <!-- Custom styles for this template-->
     <link href="/admin/css/sb-admin-2.min.css" rel="stylesheet">
     <link rel="icon" href="/images/images/computer.png" type="image/png">
+    <script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
+
 
 </head>
 
@@ -61,6 +63,12 @@
                                                 <div class="form-label-group mt-3">
                                                     <input type="text" class="form-control" autofocus name="brandName"
                                                         style="color:#333;" value="<%= brand[0].brandName %>">
+                                                </div>
+                                                <div class="form-label-group mt-1">
+                                                    <label for="inputProductDescription">Description</label>
+                                                    <textarea name="description" class="form-control" id="editor"
+                                                        cols="30" rows="10"
+                                                        value="<%= brand[0].description %>"><%= brand[0].description %></textarea>
                                                 </div>
                                                 <button class="btn btn-lg btn-primary btn-block text-uppercase mt-3"
                                                     type="submit">Update</button>
@@ -110,7 +118,9 @@
             </div>
         </div>
     </div>
-
+    <script>
+        CKEDITOR.replace('editor');
+    </script>
     <!-- Bootstrap core JavaScript-->
     <script src="/admin/vendor/jquery/jquery.min.js"></script>
     <script src="/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

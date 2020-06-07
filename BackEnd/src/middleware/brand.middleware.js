@@ -2,7 +2,7 @@ import connectDB from '../config/connectDB';
 
 // CHECK brand name already exists INSERT
 module.exports.brandNameInsert = (req, res, next) => {
-  const values = req.body;
+  const values = req.body.values.brandName;
   connectDB.query(
     'SELECT `brandName` FROM `tbl_brands` WHERE brandName = ?',
     [values],
@@ -25,7 +25,7 @@ module.exports.brandNameInsert = (req, res, next) => {
 
 // CHECK brand name already exists UPDATE
 module.exports.brandNameUpdate = (req, res, next) => {
-  const brandName = req.body;
+  const brandName = req.body.values.brandName;
   connectDB.query(
     'SELECT `brandName` FROM `tbl_brands` WHERE brandName = ?',
     [brandName],

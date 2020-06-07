@@ -45,6 +45,7 @@
                                 <tr>
                                     <th scope="col">ID</th>
                                     <th scope="col">Brand Name</th>
+                                    <th scope="col">Description</th>
                                     <th scope="col">Option</th>
                                     <th scope="col">Option</th>
                                 </tr>
@@ -63,7 +64,14 @@
                                         <%= item.id %>
                                     </td>
                                     <td>
-                                        <%= item.brandName %>
+                                        <input type="text" value="<%= item.brandName %>" name="brandName"
+                                            class="form-control inputBrandName" style="width: 150px;" disabled>
+                                    </td>
+                                    <td>
+                                        <% item.description = item.description.replace(/(<([^>]+)>)/ig, "");%>
+                                        <textarea name="description" id="editor" cols="40" rows="4" disabled>
+                                             <%= item.description %>
+                                        </textarea>
                                     </td>
                                     <td>
                                         <a href="/brand/update/<%= item.id %>" class="text-decorection-none">
