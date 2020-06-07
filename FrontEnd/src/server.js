@@ -1,8 +1,8 @@
 require('dotenv').config();
 import express from 'express';
+import bodyParser from 'body-parser';
 import i18n from 'i18n';
 import cookieParser from 'cookie-parser';
-import bodyParser from 'body-parser';
 import connectFlash from 'connect-flash';
 import configSS from './config/configSS';
 import userRoute from './routes/user.routejs';
@@ -27,8 +27,6 @@ const host = process.env.APP_HOST || 'localhost';
 app.set('views', './src/views');
 app.set('view engine', 'ejs');
 
-
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(connectFlash());
@@ -36,14 +34,13 @@ app.use(express.static('src/public'));
 app.use(express.json({ limit: '1mb' }));
 
 i18n.configure({
-    locales: ['en', 'vn'],
-    directory: __dirname + '/locales',
-    cookie: 'lang'
+    locales: ['en', 'vi'],
+    cookie: 'lang',
+    directory: __dirname + '/locales'
 });
 
 app.use(cookieParser());
-app.use(i18n.init)
-
+app.use(i18n.init);
 // session
 configSS(app);
 // app use  
@@ -58,6 +55,7 @@ app.use('/customer', requireAuth.requireAuth, customerRoute);
 app.use('/order', requireAuth.requireAuth, orderRoute);
 app.use('/admin', adminRoute);
 app.use('/payment', requireAuth.requireAuth, paymentRoute);
+
 
 app.use('/change-lang/:lang', (req, res) => {
     res.cookie('lang', req.params.lang, { maxAge: 900000 });

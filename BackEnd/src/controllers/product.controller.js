@@ -127,13 +127,12 @@ module.exports.updateProduct = async (req, res) => {
 // delete a product
 module.exports.deleteProduct = (req, res) => {
     let id = req.params.id;
-    console.log(id)
+
     connectDB.query(
         'SELECT `productName` FROM `tbl_products` WHERE id = ? ; DELETE FROM `tbl_products` WHERE id = ?', [id, id],
         (err, result) => {
 
             if (err) {
-                console.log(err)
                 res.json({ deleteError: true, nameProduct: result[0][0].productName })
                 return;
             }

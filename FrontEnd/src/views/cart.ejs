@@ -24,18 +24,31 @@
         <!-- Header -->
         <%- include("main/header/header"); %>
 
-            <!-- Cart -->
+        <!-- Cart -->
 
-            <%- include("cart/cartSection"); %>
+        <%- include("cart/cartSection"); %>
 
-                <!-- Footer -->
+        <!-- Footer -->
 
-                <%- include("main/footer/footer"); %>
+        <%- include("main/footer/footer"); %>
 
-                    <!-- Copyright -->
+        <!-- Copyright -->
 
-                    <%- include("main/copyright/copyright"); %>
+        <%- include("main/copyright/copyright"); %>
     </div>
+    <script>
+        var date = new Date();
+
+        var day = date.getDate();
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+
+        if (month < 10) month = "0" + month;
+        if (day < 10) day = "0" + day;
+
+        var today = year + "-" + month + "-" + day;
+        document.getElementById("theDate").value = today;
+    </script>
     <script src="/javascript/js/jquery-3.3.1.min.js"></script>
     <script src="/stylesheets/styles/bootstrap4/popper.js"></script>
     <script src="/stylesheets/styles/bootstrap4/bootstrap.min.js"></script>
