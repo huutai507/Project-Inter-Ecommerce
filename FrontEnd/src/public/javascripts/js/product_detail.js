@@ -47,10 +47,10 @@ function displayProductDetail() {
                                     <p>${getProduct.description}
                                     </p>
                                 </div>
-                                <div class="order_info d-flex flex-row">
+                                <div class="order_info d-flex flex-row" style="margin-top:0">
                                     <form action="#">
                                         <div class="clearfix" style="z-index: 1000;">
-                                        <div class="product_price" style="color: red">$${getProduct.price - getProduct.promotion}</div>
+                                        <div class="product_price" style="color: red; margin-top:0">$${getProduct.price - getProduct.promotion}</div>
                                         <div class="button_container">
                                             <a href="/cart" class="productDetail" style="text-decoration: none; outline: none; color: black;">
                                               <button type="button" class="button cart_button product_cart_button" style="z-index:-1"> Buy now </button>
